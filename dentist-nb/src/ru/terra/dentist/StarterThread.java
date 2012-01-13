@@ -7,8 +7,7 @@ package ru.terra.dentist;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ru.terra.dentist.dto.*;
-import ru.terraobjects.entity.dao.TOTemplateHelper;
+import ru.terra.dentist.gui.MainWindow;
 
 public class StarterThread implements Runnable
 {
@@ -31,21 +30,12 @@ public class StarterThread implements Runnable
 	    Connection connection = DriverManager.getConnection(url, username, password);
 	    if (connection != null)
 	    {
-		TOTemplateHelper th = new TOTemplateHelper(connection);
-		th.createTemplateFromClass(Patient.class);
-		th.createTemplateFromClass(Diagnosis.class);
-		th.createTemplateFromClass(Comment.class);
-		th.createTemplateFromClass(Appointment.class);
+		MainWindow mw = new MainWindow(connection);
+		mw.setVisible(true);
 	    } else
 	    {
 		System.out.println("Can't connect to db!");
 	    }
-	} catch (InstantiationException ex)
-	{
-	    Logger.getLogger(StarterThread.class.getName()).log(Level.SEVERE, null, ex);
-	} catch (IllegalAccessException ex)
-	{
-	    Logger.getLogger(StarterThread.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (SQLException ex)
 	{
 	    Logger.getLogger(StarterThread.class.getName()).log(Level.SEVERE, null, ex);
