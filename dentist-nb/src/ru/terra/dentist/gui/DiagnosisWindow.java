@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * DiagnosisWindow.java
  *
  * Created on 01.01.2012, 18:15:34

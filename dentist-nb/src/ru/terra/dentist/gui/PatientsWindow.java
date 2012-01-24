@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * PatientsWindow.java
  *
  * Created on 01.01.2012, 11:41:09
@@ -30,19 +25,26 @@ import ru.terraobjects.entity.dao.TOObjectsHelper;
  *
  * @author terranz
  */
-public class PatientsWindow extends javax.swing.JFrame
+public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 {
+
+    public void reload()
+    {
+        loadPatients();
+    }
 
     private class NewPatientOkActionListener implements ActionListener
     {
 
         private NewPatientDialog npd;
         private Connection conn;
+        private Reloadable r;
 
-        public NewPatientOkActionListener(NewPatientDialog npd, Connection conn)
+        public NewPatientOkActionListener(NewPatientDialog npd, Connection conn, Reloadable r)
         {
             this.npd = npd;
-            this.conn = conn; 
+            this.conn = conn;
+            this.r = r;
         }
 
         public void actionPerformed(ActionEvent e)
@@ -58,6 +60,7 @@ public class PatientsWindow extends javax.swing.JFrame
             {
                 npd.setVisible(false);
                 npd.dispose();
+                r.reload();
             }
         }
     }
@@ -94,6 +97,7 @@ public class PatientsWindow extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Пациенты");
+        setLocationByPlatform(true);
 
         jPanel1.setName("jPanel1"); // NOI18N
 
@@ -159,7 +163,7 @@ public class PatientsWindow extends javax.swing.JFrame
     private void miAddNewPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddNewPatientActionPerformed
     {//GEN-HEADEREND:event_miAddNewPatientActionPerformed
         final NewPatientDialog npd = new NewPatientDialog(this, true);
-        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, conn));
+        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, conn, this));
         npd.setVisible(true);
     }//GEN-LAST:event_miAddNewPatientActionPerformed
 

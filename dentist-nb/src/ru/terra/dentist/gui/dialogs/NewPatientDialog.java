@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * NewPatientDialog.java
  *
  * Created on 24.01.2012, 10:45:03
@@ -48,6 +43,9 @@ public class NewPatientDialog extends javax.swing.JDialog
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Ввод нового пациента");
+        setLocationByPlatform(true);
+        setModal(true);
 
         jLabel1.setText("Имя");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -125,6 +123,8 @@ public class NewPatientDialog extends javax.swing.JDialog
                     .addComponent(btnOK))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleName("Ввод нового пациента");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
