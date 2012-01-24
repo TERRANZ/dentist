@@ -10,6 +10,8 @@
  */
 package ru.terra.dentist.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -21,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.dto.Patient;
+import ru.terra.dentist.gui.dialogs.NewPatientDialog;
 import ru.terraobjects.entity.dao.TOObjectsHelper;
 
 /**
@@ -30,19 +33,47 @@ import ru.terraobjects.entity.dao.TOObjectsHelper;
 public class PatientsWindow extends javax.swing.JFrame
 {
 
+    private class NewPatientOkActionListener implements ActionListener
+    {
+
+        private NewPatientDialog npd;
+        private Connection conn;
+
+        public NewPatientOkActionListener(NewPatientDialog npd, Connection conn)
+        {
+            this.npd = npd;
+            this.conn = conn; 
+        }
+
+        public void actionPerformed(ActionEvent e)
+        {
+            TOObjectsHelper helper = new TOObjectsHelper(conn);
+            try
+            {
+                helper.storeObject(npd.getResult(), true);
+            } catch (Exception ex)
+            {
+                System.out.println(ex.getMessage());
+            } finally
+            {
+                npd.setVisible(false);
+                npd.dispose();
+            }
+        }
+    }
     private Connection conn;
 
     /** Creates new form PatientsWindow */
     public PatientsWindow()
     {
-	initComponents();
+        initComponents();
     }
 
     public PatientsWindow(Connection conn)
     {
-	this.conn = conn;
-	initComponents();
-	loadPatients();
+        this.conn = conn;
+        initComponents();
+        loadPatients();
     }
 
     /** This method is called from within the constructor to
@@ -58,8 +89,8 @@ public class PatientsWindow extends javax.swing.JFrame
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPatients = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mrEdit = new javax.swing.JMenu();
+        miAddNewPatient = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Пациенты");
@@ -95,14 +126,19 @@ public class PatientsWindow extends javax.swing.JFrame
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
-        jMenu2.setText("Редактирование");
-        jMenu2.setName("jMenu2"); // NOI18N
+        mrEdit.setText("Редактирование");
+        mrEdit.setName("mrEdit"); // NOI18N
 
-        jMenuItem1.setText("Добавить пациента");
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenu2.add(jMenuItem1);
+        miAddNewPatient.setText("Добавить пациента");
+        miAddNewPatient.setName("miAddNewPatient"); // NOI18N
+        miAddNewPatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddNewPatientActionPerformed(evt);
+            }
+        });
+        mrEdit.add(miAddNewPatient);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(mrEdit);
 
         setJMenuBar(jMenuBar1);
 
@@ -120,71 +156,82 @@ public class PatientsWindow extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void miAddNewPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddNewPatientActionPerformed
+    {//GEN-HEADEREND:event_miAddNewPatientActionPerformed
+        final NewPatientDialog npd = new NewPatientDialog(this, true);
+        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, conn));
+        npd.setVisible(true);
+    }//GEN-LAST:event_miAddNewPatientActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[])
     {
-	java.awt.EventQueue.invokeLater(new Runnable()
-	{
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
 
-	    public void run()
-	    {
-		new PatientsWindow().setVisible(true);
-	    }
-	});
+            public void run()
+            {
+                new PatientsWindow().setVisible(true);
+            }
+        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem miAddNewPatient;
+    private javax.swing.JMenu mrEdit;
     private javax.swing.JTable tblPatients;
     // End of variables declaration//GEN-END:variables
 
     private void loadPatients()
     {
-	ExecutorService pool = Executors.newFixedThreadPool(1);
-	Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
-	{
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
+        {
 
-	    TOObjectsHelper helper = new TOObjectsHelper(conn);
+            TOObjectsHelper helper = new TOObjectsHelper(conn);
 
-	    public DefaultTableModel call() throws Exception
-	    {
-		Vector<String> tableHeaders = new Vector<String>();
-		Vector tableData = new Vector();
-		tableHeaders.add("Идент");
-		tableHeaders.add("Имя");
-		tableHeaders.add("Отчество");
-		tableHeaders.add("Фамилия");
-		tableHeaders.add("Номер");
+            public DefaultTableModel call() throws Exception
+            {
+                Vector<String> tableHeaders = new Vector<String>();
+                Vector tableData = new Vector();
+                tableHeaders.add("Идент");
+                tableHeaders.add("Имя");
+                tableHeaders.add("Отчество");
+                tableHeaders.add("Фамилия");
+                tableHeaders.add("Номер");
 
-		for (Object o : helper.loadObjects(Patient.class))
-		{
-		    Patient patient = (Patient) o;
-		    Vector<Object> oneRow = new Vector<Object>();
-		    oneRow.add(patient.getPatId());
-		    oneRow.add(patient.getPatName());
-		    oneRow.add(patient.getPatMName());
-		    oneRow.add(patient.getPatSName());
-		    oneRow.add(patient.getPatNum());
-		    tableData.add(oneRow);
-		}
-		return new DefaultTableModel(tableData, tableHeaders);
-	    }
-	};
-	Future<DefaultTableModel> future = pool.submit(loader);
-	try
-	{
-	    tblPatients.setModel(future.get());
-	} catch (InterruptedException ex)
-	{
-	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-	} catch (ExecutionException ex)
-	{
-	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-	}
+                for (Object o : helper.loadObjects(Patient.class))
+                {
+                    Patient patient = (Patient) o;
+                    Vector<Object> oneRow = new Vector<Object>();
+                    oneRow.add(patient.getPatId());
+                    oneRow.add(patient.getPatName());
+                    oneRow.add(patient.getPatMName());
+                    oneRow.add(patient.getPatSName());
+                    oneRow.add(patient.getPatNum());
+                    tableData.add(oneRow);
+                }
+                return new DefaultTableModel(tableData, tableHeaders);
+            }
+        };
+        Future<DefaultTableModel> future = pool.submit(loader);
+        try
+        {
+            tblPatients.setModel(future.get());
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
     }
 }
