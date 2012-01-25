@@ -94,6 +94,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         jMenuBar1 = new javax.swing.JMenuBar();
         mrEdit = new javax.swing.JMenu();
         miAddNewPatient = new javax.swing.JMenuItem();
+        miEditPatient = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Пациенты");
@@ -142,6 +143,15 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         });
         mrEdit.add(miAddNewPatient);
 
+        miEditPatient.setText("Редактировать пациента");
+        miEditPatient.setName("miEditPatient"); // NOI18N
+        miEditPatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEditPatientActionPerformed(evt);
+            }
+        });
+        mrEdit.add(miEditPatient);
+
         jMenuBar1.add(mrEdit);
 
         setJMenuBar(jMenuBar1);
@@ -162,10 +172,25 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 
     private void miAddNewPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddNewPatientActionPerformed
     {//GEN-HEADEREND:event_miAddNewPatientActionPerformed
-        final NewPatientDialog npd = new NewPatientDialog(this, true);
+        NewPatientDialog npd = new NewPatientDialog(this, true);
         npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, conn, this));
         npd.setVisible(true);
     }//GEN-LAST:event_miAddNewPatientActionPerformed
+
+    private void miEditPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditPatientActionPerformed
+    {//GEN-HEADEREND:event_miEditPatientActionPerformed
+        NewPatientDialog npd = new NewPatientDialog(this, true);
+        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, conn, this));        
+        Patient dto = new Patient();
+        Integer row = tblPatients.getSelectedRow();
+        dto.setPatId((Integer) tblPatients.getModel().getValueAt(row, 0));
+        dto.setPatName((String) tblPatients.getModel().getValueAt(row, 1));
+        dto.setPatMName((String) tblPatients.getModel().getValueAt(row, 2));
+        dto.setPatSName((String) tblPatients.getModel().getValueAt(row, 3));
+        dto.setPatNum((Integer) tblPatients.getModel().getValueAt(row, 4));
+        npd.setPatient(dto);
+        npd.setVisible(true);
+    }//GEN-LAST:event_miEditPatientActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,6 +211,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem miAddNewPatient;
+    private javax.swing.JMenuItem miEditPatient;
     private javax.swing.JMenu mrEdit;
     private javax.swing.JTable tblPatients;
     // End of variables declaration//GEN-END:variables

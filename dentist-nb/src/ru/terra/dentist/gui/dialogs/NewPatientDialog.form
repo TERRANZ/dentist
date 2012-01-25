@@ -7,9 +7,6 @@
     <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="modal" type="boolean" value="true"/>
   </Properties>
-  <AccessibilityProperties>
-    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="&#x412;&#x432;&#x43e;&#x434; &#x43d;&#x43e;&#x432;&#x43e;&#x433;&#x43e; &#x43f;&#x430;&#x446;&#x438;&#x435;&#x43d;&#x442;&#x430;"/>
-  </AccessibilityProperties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>

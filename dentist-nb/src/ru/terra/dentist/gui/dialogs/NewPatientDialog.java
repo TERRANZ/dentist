@@ -205,6 +205,14 @@ public class NewPatientDialog extends javax.swing.JDialog
         res.setPatId(0);
         return res;
     }
+    
+    public void setPatient(Patient p)
+    {
+        tfName.setText(p.getPatName());
+        tfMiddlename.setText(p.getPatMName());
+        tfSurname.setText(p.getPatSName());
+        spNum.setValue(p.getPatNum());        
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;

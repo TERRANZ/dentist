@@ -77,4 +77,9 @@ public class Patient
     {
         this.patSName = patSName;
     }
+
+    public void setPatId(Object valueAt)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }
