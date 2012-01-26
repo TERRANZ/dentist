@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 26.01.2012 19:42:08 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class catalog="dentist" name="ru.terra.dentist.orm.entity.Patient" table="patient">
+    <id name="patId" type="int">
+      <column name="pat_id"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="patNum" type="java.lang.Integer">
+      <column name="pat_num"/>
+    </property>
+    <property name="patSurname" type="string">
+      <column length="100" name="pat_surname"/>
+    </property>
+    <property name="patName" type="string">
+      <column length="100" name="pat_name"/>
+    </property>
+    <property name="patMidname" type="string">
+      <column length="100" name="pat_midname"/>
+    </property>
+    <set inverse="true" name="appointments">
+      <key>
+        <column name="pat_id" not-null="true"/>
+      </key>
+      <one-to-many class="ru.terra.dentist.orm.entity.Appointment"/>
+    </set>
+  </class>
+</hibernate-mapping>

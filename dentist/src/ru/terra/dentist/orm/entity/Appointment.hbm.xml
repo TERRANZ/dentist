@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 26.01.2012 19:42:08 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+  <class catalog="dentist" name="ru.terra.dentist.orm.entity.Appointment" table="appointment">
+    <composite-id class="ru.terra.dentist.orm.entity.AppointmentId" name="id">
+      <key-property name="appId" type="int">
+        <column name="app_id"/>
+      </key-property>
+      <key-property name="patId" type="int">
+        <column name="pat_id"/>
+      </key-property>
+      <key-property name="diagId" type="int">
+        <column name="diag_id"/>
+      </key-property>
+      <key-property name="commentId" type="int">
+        <column name="comment_id"/>
+      </key-property>
+    </composite-id>
+    <many-to-one class="ru.terra.dentist.orm.entity.Patient" fetch="select" insert="false" name="patient" update="false">
+      <column name="pat_id" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="ru.terra.dentist.orm.entity.Diagnosis" fetch="select" insert="false" name="diagnosis" update="false">
+      <column name="diag_id" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="ru.terra.dentist.orm.entity.Comment" fetch="select" insert="false" name="comment" update="false">
+      <column name="comment_id" not-null="true"/>
+    </many-to-one>
+    <property name="appDate" type="date">
+      <column length="10" name="app_date"/>
+    </property>
+  </class>
+</hibernate-mapping>
