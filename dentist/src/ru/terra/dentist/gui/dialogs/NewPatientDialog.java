@@ -206,8 +206,7 @@ public class NewPatientDialog extends javax.swing.JDialog
         res.setPatName(tfName.getText());
         res.setPatMidname(tfMiddlename.getText());
         res.setPatSurname(tfSurname.getText());
-        res.setPatNum((Integer) spNum.getValue());
-        res.setPatId(0);
+        res.setPatNum((Integer) spNum.getValue());        
         return res;
     }
 

@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,10 +21,17 @@ import javax.persistence.Table;
 public class Diagnosis implements java.io.Serializable
 {
 
+    @Id
+    @Column(name = "diag_id", unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int diagId;
+    @Column(name = "diag_code", length = 20)
     private String diagCode;
+    @Column(name = "diag_name", length = 200)
     private String diagName;
+    @Column(name = "diag_price")
     private Integer diagPrice;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "diagnosis")
     private Set<Appointment> appointments = new HashSet<Appointment>(0);
 
     public Diagnosis()
@@ -43,8 +52,6 @@ public class Diagnosis implements java.io.Serializable
         this.appointments = appointments;
     }
 
-    @Id
-    @Column(name = "diag_id", unique = true, nullable = false)
     public int getDiagId()
     {
         return this.diagId;
@@ -55,7 +62,6 @@ public class Diagnosis implements java.io.Serializable
         this.diagId = diagId;
     }
 
-    @Column(name = "diag_code", length = 20)
     public String getDiagCode()
     {
         return this.diagCode;
@@ -66,7 +72,6 @@ public class Diagnosis implements java.io.Serializable
         this.diagCode = diagCode;
     }
 
-    @Column(name = "diag_name", length = 200)
     public String getDiagName()
     {
         return this.diagName;
@@ -77,7 +82,6 @@ public class Diagnosis implements java.io.Serializable
         this.diagName = diagName;
     }
 
-    @Column(name = "diag_price")
     public Integer getDiagPrice()
     {
         return this.diagPrice;
@@ -88,7 +92,6 @@ public class Diagnosis implements java.io.Serializable
         this.diagPrice = diagPrice;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "diagnosis")
     public Set<Appointment> getAppointments()
     {
         return this.appointments;

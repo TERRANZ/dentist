@@ -5,7 +5,7 @@
   <class catalog="dentist" name="ru.terra.dentist.orm.entity.Comment" table="comment">
     <id name="commentId" type="int">
       <column name="comment_id"/>
-      <generator class="assigned"/>
+      <generator class="increment"/>
     </id>
     <property name="commentDate" type="date">
       <column length="10" name="comment_date"/>

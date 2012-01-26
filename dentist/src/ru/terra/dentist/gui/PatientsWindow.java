@@ -161,6 +161,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         });
         mrPatients.add(miAdd);
 
+        miEdit.setText("Редактировать");
         miEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miEditActionPerformed(evt);
@@ -170,6 +171,11 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         mrPatients.add(jSeparator1);
 
         miDelete.setText("Удалить");
+        miDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDeleteActionPerformed(evt);
+            }
+        });
         mrPatients.add(miDelete);
 
         jMenuBar1.add(mrPatients);
@@ -218,6 +224,17 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         npd.setPatient(p);
         npd.setVisible(true);
     }//GEN-LAST:event_miEditActionPerformed
+
+    private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
+    {//GEN-HEADEREND:event_miDeleteActionPerformed
+        Integer row = tblPatients.getSelectedRow();
+        Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+        if (p != null)
+        {
+            pe.delete(p);
+        }
+        loadPatients();
+    }//GEN-LAST:event_miDeleteActionPerformed
 
     /**
      * @param args the command line arguments

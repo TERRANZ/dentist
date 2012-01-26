@@ -7,5 +7,9 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dentist</property>
     <property name="hibernate.connection.username">scan</property>
     <property name="hibernate.connection.password">scan</property>
+    <mapping class="ru.terra.dentist.orm.entity.Patient" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Patient.hbm.xml"/>
+    <mapping class="ru.terra.dentist.orm.entity.Diagnosis" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Diagnosis.hbm.xml"/>
+    <mapping class="ru.terra.dentist.orm.entity.Comment" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Comment.hbm.xml"/>
+    <mapping class="ru.terra.dentist.orm.entity.Appointment" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Appointment.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

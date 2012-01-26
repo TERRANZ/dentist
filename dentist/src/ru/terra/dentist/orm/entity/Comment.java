@@ -8,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,10 +24,19 @@ import javax.persistence.TemporalType;
 public class Comment implements java.io.Serializable
 {
 
+
+    @Id
+    @Column(name = "comment_id", unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int commentId;
+    @Temporal(value = TemporalType.DATE)
+    @Column(name = "comment_date", length = 10)
     private Date commentDate;
+    @Column(name = "comment_title", length = 100)
     private String commentTitle;
+    @Column(name = "comment_text", length = 200)
     private String commentText;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "comment")
     private Set<Appointment> appointments = new HashSet<Appointment>(0);
 
     public Comment()
@@ -46,8 +57,6 @@ public class Comment implements java.io.Serializable
         this.appointments = appointments;
     }
 
-    @Id
-    @Column(name = "comment_id", unique = true, nullable = false)
     public int getCommentId()
     {
         return this.commentId;
@@ -58,8 +67,6 @@ public class Comment implements java.io.Serializable
         this.commentId = commentId;
     }
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "comment_date", length = 10)
     public Date getCommentDate()
     {
         return this.commentDate;
@@ -70,7 +77,6 @@ public class Comment implements java.io.Serializable
         this.commentDate = commentDate;
     }
 
-    @Column(name = "comment_title", length = 100)
     public String getCommentTitle()
     {
         return this.commentTitle;
@@ -81,7 +87,6 @@ public class Comment implements java.io.Serializable
         this.commentTitle = commentTitle;
     }
 
-    @Column(name = "comment_text", length = 200)
     public String getCommentText()
     {
         return this.commentText;
@@ -92,7 +97,6 @@ public class Comment implements java.io.Serializable
         this.commentText = commentText;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "comment")
     public Set<Appointment> getAppointments()
     {
         return this.appointments;

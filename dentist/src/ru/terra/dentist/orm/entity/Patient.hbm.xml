@@ -5,7 +5,7 @@
   <class catalog="dentist" name="ru.terra.dentist.orm.entity.Patient" table="patient">
     <id name="patId" type="int">
       <column name="pat_id"/>
-      <generator class="assigned"/>
+      <generator class="increment"/>
     </id>
     <property name="patNum" type="java.lang.Integer">
       <column name="pat_num"/>

@@ -5,7 +5,7 @@
   <class catalog="dentist" name="ru.terra.dentist.orm.entity.Diagnosis" table="diagnosis">
     <id name="diagId" type="int">
       <column name="diag_id"/>
-      <generator class="assigned"/>
+      <generator class="increment"/>
     </id>
     <property name="diagCode" type="string">
       <column length="20" name="diag_code"/>

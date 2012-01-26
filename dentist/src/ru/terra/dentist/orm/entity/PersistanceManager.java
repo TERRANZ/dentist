@@ -40,21 +40,7 @@ public abstract class PersistanceManager
         try
         {
             session.beginTransaction();
-            session.update(o);
-            session.getTransaction().commit();
-        }
-        catch (HibernateException he)
-        {
-            he.printStackTrace();
-        }
-    }
-
-    public void saveNew(Object o)
-    {
-        try
-        {
-            session.beginTransaction();
-            session.save(o);
+            session.saveOrUpdate(o);
             session.getTransaction().commit();
         }
         catch (HibernateException he)

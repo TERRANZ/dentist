@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,11 +21,19 @@ import javax.persistence.Table;
 public class Patient implements java.io.Serializable
 {
 
+    @Id
+    @Column(name = "pat_id", unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.TABLE)
     private int patId;
+    @Column(name = "pat_num")
     private Integer patNum;
+    @Column(name = "pat_surname", length = 100)
     private String patSurname;
+    @Column(name = "pat_name", length = 100)
     private String patName;
+    @Column(name = "pat_midname", length = 100)
     private String patMidname;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patient")
     private Set<Appointment> appointments = new HashSet<Appointment>(0);
 
     public Patient()
@@ -45,8 +55,6 @@ public class Patient implements java.io.Serializable
         this.appointments = appointments;
     }
 
-    @Id
-    @Column(name = "pat_id", unique = true, nullable = false)
     public int getPatId()
     {
         return this.patId;
@@ -57,7 +65,6 @@ public class Patient implements java.io.Serializable
         this.patId = patId;
     }
 
-    @Column(name = "pat_num")
     public Integer getPatNum()
     {
         return this.patNum;
@@ -68,7 +75,6 @@ public class Patient implements java.io.Serializable
         this.patNum = patNum;
     }
 
-    @Column(name = "pat_surname", length = 100)
     public String getPatSurname()
     {
         return this.patSurname;
@@ -79,7 +85,6 @@ public class Patient implements java.io.Serializable
         this.patSurname = patSurname;
     }
 
-    @Column(name = "pat_name", length = 100)
     public String getPatName()
     {
         return this.patName;
@@ -90,7 +95,6 @@ public class Patient implements java.io.Serializable
         this.patName = patName;
     }
 
-    @Column(name = "pat_midname", length = 100)
     public String getPatMidname()
     {
         return this.patMidname;
@@ -101,7 +105,6 @@ public class Patient implements java.io.Serializable
         this.patMidname = patMidname;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patient")
     public Set<Appointment> getAppointments()
     {
         return this.appointments;
