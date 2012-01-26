@@ -21,6 +21,15 @@ public class PatientDTO
         this.num = p.getPatNum();
     }
 
+    public PatientDTO()
+    {
+        this.id = 0;
+        this.name = "";
+        this.midname = "";
+        this.num = 0;
+        this.surname = "";
+    }
+
     public Integer getId()
     {
         return id;
