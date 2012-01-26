@@ -4,10 +4,12 @@ package ru.terra.dentist.gui;
  *
  * @author terranz
  */
-public class MainWindow extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame
+{
 
     /** Creates new form MainWindow */
-    public MainWindow() {
+    public MainWindow()
+    {
         initComponents();
     }
 
@@ -25,6 +27,7 @@ public class MainWindow extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         jMenuBar1 = new javax.swing.JMenuBar();
         mrPatients = new javax.swing.JMenu();
+        miPatList = new javax.swing.JMenuItem();
         mrAppointments = new javax.swing.JMenu();
         mrDIagnosis = new javax.swing.JMenu();
         mrReports = new javax.swing.JMenu();
@@ -40,6 +43,20 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Dentist");
 
         mrPatients.setText("Пациенты");
+        mrPatients.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mrPatientsActionPerformed(evt);
+            }
+        });
+
+        miPatList.setText("Список");
+        miPatList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPatListActionPerformed(evt);
+            }
+        });
+        mrPatients.add(miPatList);
+
         jMenuBar1.add(mrPatients);
 
         mrAppointments.setText("Приёмы");
@@ -71,27 +88,40 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void mrPatientsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mrPatientsActionPerformed
+    {//GEN-HEADEREND:event_mrPatientsActionPerformed
+    }//GEN-LAST:event_mrPatientsActionPerformed
+
+    private void miPatListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miPatListActionPerformed
+    {//GEN-HEADEREND:event_miPatListActionPerformed
+        PatientsWindow pw = new PatientsWindow();
+        pw.setVisible(true);
+    }//GEN-LAST:event_miPatListActionPerformed
+
     /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
+    {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+
+            public void run()
+            {
                 new MainWindow().setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem miParientsReport;
+    private javax.swing.JMenuItem miPatList;
     private javax.swing.JMenu mrAppointments;
     private javax.swing.JMenu mrDIagnosis;
     private javax.swing.JMenu mrPatients;
     private javax.swing.JMenu mrReports;
     // End of variables declaration//GEN-END:variables
-
 }
