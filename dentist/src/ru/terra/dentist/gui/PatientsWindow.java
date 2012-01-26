@@ -1,6 +1,7 @@
 package ru.terra.dentist.gui;
 
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -10,6 +11,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import ru.terra.dentist.gui.dialogs.NewPatientDialog;
 import ru.terra.dentist.orm.PatientEntity;
 import ru.terra.dentist.orm.dto.PatientDTO;
 import ru.terra.dentist.orm.entity.Patient;
@@ -18,8 +20,10 @@ import ru.terra.dentist.orm.entity.Patient;
  *
  * @author terranz
  */
-public class PatientsWindow extends javax.swing.JFrame
+public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 {
+
+    private static PatientEntity pe = new PatientEntity();
 
     /** Creates new form PatientsWindow */
     public PatientsWindow()
@@ -32,7 +36,8 @@ public class PatientsWindow extends javax.swing.JFrame
     {
         ExecutorService pool = Executors.newFixedThreadPool(1);
         Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
-        {        
+        {
+
             public DefaultTableModel call() throws Exception
             {
                 Vector<String> tableHeaders = new Vector<String>();
@@ -42,8 +47,6 @@ public class PatientsWindow extends javax.swing.JFrame
                 tableHeaders.add("Отчество");
                 tableHeaders.add("Фамилия");
                 tableHeaders.add("Номер");
-
-                PatientEntity pe = new PatientEntity();
 
                 for (Object o : pe.findAll(Patient.class))
                 {
@@ -63,12 +66,52 @@ public class PatientsWindow extends javax.swing.JFrame
         try
         {
             tblPatients.setModel(future.get());
-        } catch (InterruptedException ex)
+        }
+        catch (InterruptedException ex)
         {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex)
+        }
+        catch (ExecutionException ex)
         {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void reload()
+    {
+        loadPatients();
+    }
+
+    private class NewPatientOkActionListener implements ActionListener
+    {
+
+        private NewPatientDialog npd;
+        private Reloadable r;
+
+        public NewPatientOkActionListener(NewPatientDialog npd, Reloadable r)
+        {
+            this.npd = npd;
+            this.r = r;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            try
+            {
+                pe.update(npd.getResult());
+            }
+            catch (Exception ex)
+            {
+                System.out.println(ex.getMessage());
+            }
+            finally
+            {
+                npd.setVisible(false);
+                npd.dispose();
+                r.reload();
+            }
         }
     }
 
@@ -93,6 +136,7 @@ public class PatientsWindow extends javax.swing.JFrame
         miPrintAll = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Пациенты");
 
         tblPatients.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,9 +154,18 @@ public class PatientsWindow extends javax.swing.JFrame
         mrPatients.setText("Пациенты");
 
         miAdd.setText("Добавить");
+        miAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddActionPerformed(evt);
+            }
+        });
         mrPatients.add(miAdd);
 
-        miEdit.setText("Редактировать");
+        miEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEditActionPerformed(evt);
+            }
+        });
         mrPatients.add(miEdit);
         mrPatients.add(jSeparator1);
 
@@ -144,6 +197,28 @@ public class PatientsWindow extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void miAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddActionPerformed
+    {//GEN-HEADEREND:event_miAddActionPerformed
+        NewPatientDialog npd = new NewPatientDialog(this, true);
+        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
+        npd.setVisible(true);
+    }//GEN-LAST:event_miAddActionPerformed
+
+    private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
+    {//GEN-HEADEREND:event_miEditActionPerformed
+        NewPatientDialog npd = new NewPatientDialog(this, true);
+        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
+        PatientDTO p = new PatientDTO();
+        Integer row = tblPatients.getSelectedRow();
+        p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
+        p.setName((String) tblPatients.getModel().getValueAt(row, 1));
+        p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
+        p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
+        p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
+        npd.setPatient(p);
+        npd.setVisible(true);
+    }//GEN-LAST:event_miEditActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -152,6 +227,7 @@ public class PatientsWindow extends javax.swing.JFrame
         java.awt.EventQueue.invokeLater(new Runnable()
         {
 
+            @Override
             public void run()
             {
                 new PatientsWindow().setVisible(true);
