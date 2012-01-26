@@ -1,25 +1,75 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * PatientsWindow.java
- *
- * Created on 26.01.2012, 20:57:44
- */
-
 package ru.terra.dentist.gui;
+
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import ru.terra.dentist.orm.PatientEntity;
+import ru.terra.dentist.orm.dto.PatientDTO;
+import ru.terra.dentist.orm.entity.Patient;
 
 /**
  *
  * @author terranz
  */
-public class PatientsWindow extends javax.swing.JFrame {
+public class PatientsWindow extends javax.swing.JFrame
+{
 
     /** Creates new form PatientsWindow */
-    public PatientsWindow() {
+    public PatientsWindow()
+    {
         initComponents();
+        loadPatients();
+    }
+
+    private void loadPatients()
+    {
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
+        {        
+            public DefaultTableModel call() throws Exception
+            {
+                Vector<String> tableHeaders = new Vector<String>();
+                Vector tableData = new Vector();
+                tableHeaders.add("Идент");
+                tableHeaders.add("Имя");
+                tableHeaders.add("Отчество");
+                tableHeaders.add("Фамилия");
+                tableHeaders.add("Номер");
+
+                PatientEntity pe = new PatientEntity();
+
+                for (Object o : pe.findAll(Patient.class))
+                {
+                    PatientDTO patient = new PatientDTO((Patient) o);
+                    Vector<Object> oneRow = new Vector<Object>();
+                    oneRow.add(patient.getId());
+                    oneRow.add(patient.getName());
+                    oneRow.add(patient.getMidname());
+                    oneRow.add(patient.getSurname());
+                    oneRow.add(patient.getNum());
+                    tableData.add(oneRow);
+                }
+                return new DefaultTableModel(tableData, tableHeaders);
+            }
+        };
+        Future<DefaultTableModel> future = pool.submit(loader);
+        try
+        {
+            tblPatients.setModel(future.get());
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -95,16 +145,19 @@ public class PatientsWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
+    {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+
+            public void run()
+            {
                 new PatientsWindow().setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -117,5 +170,4 @@ public class PatientsWindow extends javax.swing.JFrame {
     private javax.swing.JMenu mrReports;
     private javax.swing.JTable tblPatients;
     // End of variables declaration//GEN-END:variables
-
 }

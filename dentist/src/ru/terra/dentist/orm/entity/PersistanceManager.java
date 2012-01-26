@@ -15,7 +15,7 @@ public abstract class PersistanceManager
 
     protected Session session = HibernateUtil.getSessionFactory().openSession();
 
-    public List<Object> load(Class entity)
+    public List<Object> findAll(Class entity)
     {
         Criteria c = session.createCriteria(entity);
         return c.list();
