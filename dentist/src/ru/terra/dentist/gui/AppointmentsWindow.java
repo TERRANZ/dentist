@@ -26,6 +26,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
     {
         initComponents();
         loadApp();
+        this.setLocationRelativeTo(null);
     }
     AppointmentsManager am = new AppointmentsManager();
 

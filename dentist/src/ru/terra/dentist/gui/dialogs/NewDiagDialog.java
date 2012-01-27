@@ -45,6 +45,7 @@ public class NewDiagDialog extends javax.swing.JDialog
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationByPlatform(true);
 
         jLabel1.setText("Наименование");
 

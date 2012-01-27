@@ -28,6 +28,7 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
     {
         initComponents();
         loadDiagnosis();
+        this.setLocationRelativeTo(null);
     }
 
     private void loadDiagnosis()

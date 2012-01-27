@@ -136,6 +136,7 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         dpDate = new com.michaelbaranov.microba.calendar.DatePicker();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationByPlatform(true);
 
         jLabel1.setText("Пациент");
 

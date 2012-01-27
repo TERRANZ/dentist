@@ -29,6 +29,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
     {
         initComponents();
         loadPatients();
+        this.setLocationRelativeTo(null);
     }
 
     private void loadPatients()
