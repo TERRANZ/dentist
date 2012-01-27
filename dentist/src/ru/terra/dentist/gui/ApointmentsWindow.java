@@ -1,25 +1,101 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * ApointmentsWindow.java
- *
- * Created on 27.01.2012, 11:05:07
- */
 package ru.terra.dentist.gui;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import ru.terra.dentist.gui.dialogs.NewAppDialog;
+import ru.terra.dentist.orm.AppointmentsManager;
+import ru.terra.dentist.orm.entity.Appointment;
+import ru.terra.dentist.orm.entity.Diagnosis;
 
 /**
  *
  * @author terranz
  */
-public class ApointmentsWindow extends javax.swing.JFrame
+public class ApointmentsWindow extends javax.swing.JFrame implements Reloadable
 {
     /** Creates new form ApointmentsWindow */
     public ApointmentsWindow()
     {
         initComponents();
+    }
+    AppointmentsManager am = new AppointmentsManager();
+
+    private class NewAppDialogOkListener implements ActionListener
+    {
+        private NewAppDialog nad;
+        private Reloadable r;
+
+        public NewAppDialogOkListener(NewAppDialog nad, Reloadable r)
+        {
+            this.nad = nad;
+            this.r = r;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            try
+            {
+                am.update(nad.getResult());
+            } catch (Exception ex)
+            {
+                System.out.println(ex.getMessage());
+            } finally
+            {
+                nad.setVisible(false);
+                nad.dispose();
+                r.reload();
+            }
+        }
+    }
+
+    private void loadApp()
+    {
+        ExecutorService pool = Executors.newFixedThreadPool(1);
+        Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
+        {
+            @Override
+            public DefaultTableModel call() throws Exception
+            {
+                Vector<String> tableHeaders = new Vector<String>();
+                Vector tableData = new Vector();
+                tableHeaders.add("Идент");
+                tableHeaders.add("Пациент");
+                tableHeaders.add("Диагноз");
+                tableHeaders.add("Дата приёма");
+
+                for (Object o : am.findAll(Diagnosis.class))
+                {
+                    Vector<Object> oneRow = new Vector<Object>();
+                    oneRow.add(((Appointment) o).getId().getAppId());
+                    oneRow.add(((Appointment) o).getPatient().getPatName());
+                    oneRow.add(((Appointment) o).getDiagnosis().getDiagName());
+                    oneRow.add(((Appointment) o).getAppDate());
+                    tableData.add(oneRow);
+                }
+                return new DefaultTableModel(tableData, tableHeaders);
+            }
+        };
+        Future<DefaultTableModel> future = pool.submit(loader);
+        try
+        {
+            tblApps.setModel(future.get());
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -61,9 +137,19 @@ public class ApointmentsWindow extends javax.swing.JFrame
         mrApp.setText("Приёмы");
 
         miNew.setText("Новый");
+        miNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNewActionPerformed(evt);
+            }
+        });
         mrApp.add(miNew);
 
         miEdit.setText("Изменить");
+        miEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEditActionPerformed(evt);
+            }
+        });
         mrApp.add(miEdit);
         mrApp.add(jSeparator1);
 
@@ -94,6 +180,24 @@ public class ApointmentsWindow extends javax.swing.JFrame
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void miNewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miNewActionPerformed
+    {//GEN-HEADEREND:event_miNewActionPerformed
+        NewAppDialog nad = new NewAppDialog(this, true);
+        nad.getOkButton().addActionListener(new NewAppDialogOkListener(nad, this));
+        nad.setVisible(true);
+    }//GEN-LAST:event_miNewActionPerformed
+
+    private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
+    {//GEN-HEADEREND:event_miEditActionPerformed
+        NewAppDialog nad = new NewAppDialog(this, true);
+        nad.getOkButton().addActionListener(new NewAppDialogOkListener(nad, this));
+        Appointment a = new Appointment();
+        Integer row = tblApps.getSelectedRow();
+        
+        nad.setApp(a);
+        nad.setVisible(true);
+    }//GEN-LAST:event_miEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,4 +255,10 @@ public class ApointmentsWindow extends javax.swing.JFrame
     private javax.swing.JMenu mrReports;
     private javax.swing.JTable tblApps;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void reload()
+    {
+        loadApp();
+    }
 }

@@ -69,7 +69,7 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private class NewDiagOkActionListener implements ActionListener
     {
         private NewDiagDialog ndd;
@@ -189,7 +189,6 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
 
     private void miAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddActionPerformed
     {//GEN-HEADEREND:event_miAddActionPerformed
-
         NewDiagDialog ndd = new NewDiagDialog(this, true);
         ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
         ndd.setVisible(true);
@@ -197,7 +196,6 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
 
     private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
     {//GEN-HEADEREND:event_miEditActionPerformed
-
         NewDiagDialog ndd = new NewDiagDialog(this, true);
         ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
         Diagnosis d = new Diagnosis();
@@ -205,14 +203,13 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
         d.setDiagId((Integer) tblPatients.getModel().getValueAt(row, 0));
         d.setDiagName((String) tblPatients.getModel().getValueAt(row, 1));
         d.setDiagCode((String) tblPatients.getModel().getValueAt(row, 2));
-        d.setDiagPrice((Integer) tblPatients.getModel().getValueAt(row, 3));        
+        d.setDiagPrice((Integer) tblPatients.getModel().getValueAt(row, 3));
         ndd.setDiagnosis(d);
         ndd.setVisible(true);
     }//GEN-LAST:event_miEditActionPerformed
 
     private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
     {//GEN-HEADEREND:event_miDeleteActionPerformed
-
         Integer row = tblPatients.getSelectedRow();
         Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
         if (d != null)

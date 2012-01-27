@@ -1,14 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * NewAppDialog.java
- *
- * Created on 27.01.2012, 11:09:00
- */
 package ru.terra.dentist.gui.dialogs;
+
+import javax.swing.JButton;
+import ru.terra.dentist.orm.entity.Appointment;
 
 /**
  *
@@ -21,6 +14,10 @@ public class NewAppDialog extends javax.swing.JDialog
     {
         super(parent, modal);
         initComponents();
+    }
+
+    public void setApp(Appointment a)
+    {
     }
 
     /** This method is called from within the constructor to
@@ -215,6 +212,21 @@ public class NewAppDialog extends javax.swing.JDialog
                 dialog.setVisible(true);
             }
         });
+    }
+
+    public Appointment getResult()
+    {
+        return null;
+    }
+
+    public JButton getOkButton()
+    {
+        return btnOK2;
+    }
+
+    public JButton getCancelButton()
+    {
+        return btnCancel;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
