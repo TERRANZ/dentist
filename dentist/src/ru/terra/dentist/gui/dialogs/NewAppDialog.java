@@ -170,6 +170,11 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         btnOK2.setText("OK");
 
         btnCancel.setText("Отмена");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         btnPrint.setText("Распечатать");
 
@@ -264,6 +269,11 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
         ndd.setVisible(true);
     }//GEN-LAST:event_btnNewDiagActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelActionPerformed
+    {//GEN-HEADEREND:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * @param args the command line arguments

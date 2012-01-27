@@ -15,7 +15,6 @@ import ru.terra.dentist.orm.entity.Patient;
  */
 public class NewPatientDialog extends javax.swing.JDialog
 {
-
     /** Creates new form NewPatientDialog */
     public NewPatientDialog(java.awt.Frame parent, boolean modal)
     {
@@ -73,6 +72,11 @@ public class NewPatientDialog extends javax.swing.JDialog
 
         btnCancel.setText("Отмена");
         btnCancel.setName("btnCancel"); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -125,10 +129,13 @@ public class NewPatientDialog extends javax.swing.JDialog
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getAccessibleContext().setAccessibleName("Ввод нового пациента");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelActionPerformed
+    {//GEN-HEADEREND:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,20 +157,16 @@ public class NewPatientDialog extends javax.swing.JDialog
                     break;
                 }
             }
-        }
-        catch (ClassNotFoundException ex)
+        } catch (ClassNotFoundException ex)
         {
             java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
+        } catch (InstantiationException ex)
         {
             java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
+        } catch (IllegalAccessException ex)
         {
             java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -172,13 +175,11 @@ public class NewPatientDialog extends javax.swing.JDialog
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
-
             public void run()
             {
                 NewPatientDialog dialog = new NewPatientDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter()
                 {
-
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e)
                     {
@@ -206,7 +207,7 @@ public class NewPatientDialog extends javax.swing.JDialog
         res.setPatName(tfName.getText());
         res.setPatMidname(tfMiddlename.getText());
         res.setPatSurname(tfSurname.getText());
-        res.setPatNum((Integer) spNum.getValue());        
+        res.setPatNum((Integer) spNum.getValue());
         return res;
     }
 
