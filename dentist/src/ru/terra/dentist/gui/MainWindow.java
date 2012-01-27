@@ -6,7 +6,6 @@ package ru.terra.dentist.gui;
  */
 public class MainWindow extends javax.swing.JFrame
 {
-
     /** Creates new form MainWindow */
     public MainWindow()
     {
@@ -30,6 +29,7 @@ public class MainWindow extends javax.swing.JFrame
         miPatList = new javax.swing.JMenuItem();
         mrAppointments = new javax.swing.JMenu();
         mrDIagnosis = new javax.swing.JMenu();
+        miDiagList = new javax.swing.JMenuItem();
         mrReports = new javax.swing.JMenu();
         miParientsReport = new javax.swing.JMenuItem();
 
@@ -63,6 +63,15 @@ public class MainWindow extends javax.swing.JFrame
         jMenuBar1.add(mrAppointments);
 
         mrDIagnosis.setText("Диагнозы");
+
+        miDiagList.setText("Список");
+        miDiagList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDiagListActionPerformed(evt);
+            }
+        });
+        mrDIagnosis.add(miDiagList);
+
         jMenuBar1.add(mrDIagnosis);
 
         mrReports.setText("Отчёты");
@@ -91,12 +100,18 @@ public class MainWindow extends javax.swing.JFrame
     private void mrPatientsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mrPatientsActionPerformed
     {//GEN-HEADEREND:event_mrPatientsActionPerformed
     }//GEN-LAST:event_mrPatientsActionPerformed
-
+    
     private void miPatListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miPatListActionPerformed
     {//GEN-HEADEREND:event_miPatListActionPerformed
         PatientsWindow pw = new PatientsWindow();
         pw.setVisible(true);
     }//GEN-LAST:event_miPatListActionPerformed
+    
+    private void miDiagListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDiagListActionPerformed
+    {//GEN-HEADEREND:event_miDiagListActionPerformed
+        DiagnosisWindow dw = new DiagnosisWindow();
+        dw.setVisible(true);
+    }//GEN-LAST:event_miDiagListActionPerformed
 
     /**
      * @param args the command line arguments
@@ -105,7 +120,6 @@ public class MainWindow extends javax.swing.JFrame
     {
         java.awt.EventQueue.invokeLater(new Runnable()
         {
-
             public void run()
             {
                 new MainWindow().setVisible(true);
@@ -117,6 +131,7 @@ public class MainWindow extends javax.swing.JFrame
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem miDiagList;
     private javax.swing.JMenuItem miParientsReport;
     private javax.swing.JMenuItem miPatList;
     private javax.swing.JMenu mrAppointments;

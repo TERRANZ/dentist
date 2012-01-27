@@ -9,7 +9,6 @@ import ru.terra.dentist.orm.entity.Appointment;
  */
 public class AppointmentDTO
 {
-
     private Integer id;
     private PatientDTO patient;
     private DiagnosisDTO diagnosis;

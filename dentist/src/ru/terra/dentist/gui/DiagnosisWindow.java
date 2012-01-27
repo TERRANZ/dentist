@@ -1,5 +1,16 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * DiagnosisWindow.java
+ *
+ * Created on 27.01.2012, 9:21:24
+ */
 package ru.terra.dentist.gui;
 
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -11,27 +22,28 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import ru.terra.dentist.gui.dialogs.NewDiagDialog;
 import ru.terra.dentist.gui.dialogs.NewPatientDialog;
-import ru.terra.dentist.orm.PatientManager;
-import ru.terra.dentist.orm.dto.PatientDTO;
-import ru.terra.dentist.orm.entity.Patient;
+import ru.terra.dentist.orm.DiagnosisManager;
+import ru.terra.dentist.orm.dto.DiagnosisDTO;
+import ru.terra.dentist.orm.entity.Diagnosis;
 
 /**
  *
  * @author terranz
  */
-public class PatientsWindow extends javax.swing.JFrame implements Reloadable
+public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
 {
-    private static PatientManager pe = new PatientManager();
+    private static DiagnosisManager dm = new DiagnosisManager();
 
-    /** Creates new form PatientsWindow */
-    public PatientsWindow()
+    /** Creates new form DiagnosisWindow */
+    public DiagnosisWindow()
     {
         initComponents();
-        loadPatients();
+        loadDiagnosis();
     }
 
-    private void loadPatients()
+    private void loadDiagnosis()
     {
         ExecutorService pool = Executors.newFixedThreadPool(1);
         Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
@@ -42,19 +54,17 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
                 Vector<String> tableHeaders = new Vector<String>();
                 Vector tableData = new Vector();
                 tableHeaders.add("Идент");
-                tableHeaders.add("Имя");
-                tableHeaders.add("Отчество");
-                tableHeaders.add("Фамилия");
-                tableHeaders.add("Номер");
+                tableHeaders.add("Наименование");
+                tableHeaders.add("Код");
+                tableHeaders.add("Цена");
 
-                for (Object o : pe.findAll(Patient.class))
+                for (Object o : dm.findAll(Diagnosis.class))
                 {
                     Vector<Object> oneRow = new Vector<Object>();
-                    oneRow.add(((Patient) o).getPatId());
-                    oneRow.add(((Patient) o).getPatName());
-                    oneRow.add(((Patient) o).getPatMidname());
-                    oneRow.add(((Patient) o).getPatSurname());
-                    oneRow.add(((Patient) o).getPatNum());
+                    oneRow.add(((Diagnosis) o).getDiagId());
+                    oneRow.add(((Diagnosis) o).getDiagName());
+                    oneRow.add(((Diagnosis) o).getDiagCode());
+                    oneRow.add(((Diagnosis) o).getDiagPrice());
                     tableData.add(oneRow);
                 }
                 return new DefaultTableModel(tableData, tableHeaders);
@@ -72,21 +82,15 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    @Override
-    public void reload()
+    
+    private class NewDiagOkActionListener implements ActionListener
     {
-        loadPatients();
-    }
-
-    private class NewPatientOkActionListener implements ActionListener
-    {
-        private NewPatientDialog npd;
+        private NewDiagDialog ndd;
         private Reloadable r;
 
-        public NewPatientOkActionListener(NewPatientDialog npd, Reloadable r)
+        public NewDiagOkActionListener(NewDiagDialog ndd, Reloadable r)
         {
-            this.npd = npd;
+            this.ndd = ndd;
             this.r = r;
         }
 
@@ -95,14 +99,14 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         {
             try
             {
-                pe.update(npd.getResult());
+                dm.update(ndd.getResult());
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
             } finally
             {
-                npd.setVisible(false);
-                npd.dispose();
+                ndd.setVisible(false);
+                ndd.dispose();
                 r.reload();
             }
         }
@@ -128,8 +132,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         mrReports = new javax.swing.JMenu();
         miPrintAll = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Пациенты");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tblPatients.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -144,7 +147,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         ));
         jScrollPane1.setViewportView(tblPatients);
 
-        mrPatients.setText("Пациенты");
+        mrPatients.setText("Диагноз");
 
         miAdd.setText("Добавить");
         miAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -186,11 +189,13 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+            .addGap(0, 784, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+            .addGap(0, 314, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
         );
 
         pack();
@@ -198,35 +203,37 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 
     private void miAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddActionPerformed
     {//GEN-HEADEREND:event_miAddActionPerformed
-        NewPatientDialog npd = new NewPatientDialog(this, true);
-        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
-        npd.setVisible(true);
+
+        NewDiagDialog ndd = new NewDiagDialog(this, true);
+        ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
+        ndd.setVisible(true);
     }//GEN-LAST:event_miAddActionPerformed
 
     private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
     {//GEN-HEADEREND:event_miEditActionPerformed
-        NewPatientDialog npd = new NewPatientDialog(this, true);
-        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
-        PatientDTO p = new PatientDTO();
+
+        NewDiagDialog ndd = new NewDiagDialog(this, true);
+        ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
+        Diagnosis d = new Diagnosis();
         Integer row = tblPatients.getSelectedRow();
-        p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
-        p.setName((String) tblPatients.getModel().getValueAt(row, 1));
-        p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
-        p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
-        p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
-        npd.setPatient(p);
-        npd.setVisible(true);
+        d.setDiagId((Integer) tblPatients.getModel().getValueAt(row, 0));
+        d.setDiagName((String) tblPatients.getModel().getValueAt(row, 1));
+        d.setDiagCode((String) tblPatients.getModel().getValueAt(row, 2));
+        d.setDiagPrice((Integer) tblPatients.getModel().getValueAt(row, 3));        
+        ndd.setDiagnosis(d);
+        ndd.setVisible(true);
     }//GEN-LAST:event_miEditActionPerformed
 
     private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
     {//GEN-HEADEREND:event_miDeleteActionPerformed
+
         Integer row = tblPatients.getSelectedRow();
-        Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
-        if (p != null)
+        Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+        if (d != null)
         {
-            pe.delete(p);
+            dm.delete(d);
         }
-        loadPatients();
+        loadDiagnosis();
     }//GEN-LAST:event_miDeleteActionPerformed
 
     /**
@@ -234,12 +241,42 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
      */
     public static void main(String args[])
     {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex)
+        {
+            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex)
+        {
+            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex)
+        {
+            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
+            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable()
         {
-            @Override
             public void run()
             {
-                new PatientsWindow().setVisible(true);
+                new DiagnosisWindow().setVisible(true);
             }
         });
     }
@@ -255,4 +292,10 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
     private javax.swing.JMenu mrReports;
     private javax.swing.JTable tblPatients;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void reload()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

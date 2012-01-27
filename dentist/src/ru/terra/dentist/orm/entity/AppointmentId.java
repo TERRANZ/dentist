@@ -10,7 +10,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class AppointmentId implements java.io.Serializable
 {
-
     private int appId;
     private int patId;
     private int diagId;

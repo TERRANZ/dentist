@@ -10,7 +10,6 @@ import ru.terra.dentist.orm.entity.Diagnosis;
  */
 public class DiagnosisDTO
 {
-
     private Integer id;
     private String code;
     private String name;

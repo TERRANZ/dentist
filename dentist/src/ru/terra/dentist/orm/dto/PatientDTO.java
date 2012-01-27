@@ -10,7 +10,7 @@ public class PatientDTO
 {
     private Integer id;
     private Integer num;
-    private String name,surname,midname;
+    private String name, surname, midname;
 
     public PatientDTO(Patient p)
     {

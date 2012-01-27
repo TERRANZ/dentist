@@ -49,6 +49,16 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x414;&#x438;&#x430;&#x433;&#x43d;&#x43e;&#x437;&#x44b;"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="miDiagList">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x421;&#x43f;&#x438;&#x441;&#x43e;&#x43a;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDiagListActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="mrReports">
           <Properties>

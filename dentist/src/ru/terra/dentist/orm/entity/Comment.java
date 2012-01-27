@@ -23,11 +23,9 @@ import javax.persistence.TemporalType;
 @Table(name = "comment", catalog = "dentist")
 public class Comment implements java.io.Serializable
 {
-
-
     @Id
     @Column(name = "comment_id", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int commentId;
     @Temporal(value = TemporalType.DATE)
     @Column(name = "comment_date", length = 10)

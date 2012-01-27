@@ -20,10 +20,9 @@ import javax.persistence.Table;
 @Table(name = "diagnosis", catalog = "dentist")
 public class Diagnosis implements java.io.Serializable
 {
-
     @Id
     @Column(name = "diag_id", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int diagId;
     @Column(name = "diag_code", length = 20)
     private String diagCode;

@@ -12,7 +12,6 @@ import ru.terra.dentist.orm.HibernateUtil;
  */
 public abstract class PersistanceManager
 {
-
     protected Session session = HibernateUtil.getSessionFactory().openSession();
 
     public List<Object> findAll(Class entity)
@@ -28,8 +27,7 @@ public abstract class PersistanceManager
             session.beginTransaction();
             session.delete(o);
             session.getTransaction().commit();
-        }
-        catch (HibernateException he)
+        } catch (HibernateException he)
         {
             he.printStackTrace();
         }
@@ -42,12 +40,11 @@ public abstract class PersistanceManager
             session.beginTransaction();
             session.saveOrUpdate(o);
             session.getTransaction().commit();
-        }
-        catch (HibernateException he)
+        } catch (HibernateException he)
         {
             he.printStackTrace();
         }
     }
 
-    public abstract Object findById(Integer id);   
+    public abstract Object findById(Integer id);
 }

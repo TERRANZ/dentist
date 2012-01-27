@@ -21,7 +21,6 @@ import javax.persistence.TemporalType;
 @Table(name = "appointment", catalog = "dentist")
 public class Appointment implements java.io.Serializable
 {
-
     private AppointmentId id;
     private Patient patient;
     private Diagnosis diagnosis;

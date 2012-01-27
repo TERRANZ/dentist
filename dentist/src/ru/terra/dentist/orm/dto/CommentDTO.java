@@ -11,7 +11,6 @@ import ru.terra.dentist.orm.entity.Comment;
  */
 public class CommentDTO
 {
-
     private Integer id;
     private Date date;
     private String title;
