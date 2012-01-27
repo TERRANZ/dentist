@@ -21,5 +21,5 @@ public class PatientManager extends PersistanceManager
         Criteria c = session.createCriteria(Patient.class);
         c.add(Restrictions.eq("patId", id));
         return c.uniqueResult();
-    }
+    }    
 }

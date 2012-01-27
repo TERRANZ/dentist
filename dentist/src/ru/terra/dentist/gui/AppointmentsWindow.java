@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.gui.dialogs.NewAppDialog;
 import ru.terra.dentist.orm.AppointmentsManager;
 import ru.terra.dentist.orm.entity.Appointment;
-import ru.terra.dentist.orm.entity.Diagnosis;
 
 /**
  *
@@ -26,6 +25,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
     public AppointmentsWindow()
     {
         initComponents();
+        loadApp();
     }
     AppointmentsManager am = new AppointmentsManager();
 
@@ -194,7 +194,9 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
         nad.getOkButton().addActionListener(new NewAppDialogOkListener(nad, this));
         Appointment a = new Appointment();
         Integer row = tblApps.getSelectedRow();
-        
+        if (row != -1)
+        {
+        }
         nad.setApp(a);
         nad.setVisible(true);
     }//GEN-LAST:event_miEditActionPerformed

@@ -200,23 +200,29 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
         ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
         Diagnosis d = new Diagnosis();
         Integer row = tblPatients.getSelectedRow();
-        d.setDiagId((Integer) tblPatients.getModel().getValueAt(row, 0));
-        d.setDiagName((String) tblPatients.getModel().getValueAt(row, 1));
-        d.setDiagCode((String) tblPatients.getModel().getValueAt(row, 2));
-        d.setDiagPrice((Integer) tblPatients.getModel().getValueAt(row, 3));
-        ndd.setDiagnosis(d);
-        ndd.setVisible(true);
+        if (row != -1)
+        {
+            d.setDiagId((Integer) tblPatients.getModel().getValueAt(row, 0));
+            d.setDiagName((String) tblPatients.getModel().getValueAt(row, 1));
+            d.setDiagCode((String) tblPatients.getModel().getValueAt(row, 2));
+            d.setDiagPrice((Integer) tblPatients.getModel().getValueAt(row, 3));
+            ndd.setDiagnosis(d);
+            ndd.setVisible(true);
+        }
     }//GEN-LAST:event_miEditActionPerformed
 
     private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
     {//GEN-HEADEREND:event_miDeleteActionPerformed
         Integer row = tblPatients.getSelectedRow();
-        Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
-        if (d != null)
+        if (row != -1)
         {
-            dm.delete(d);
+            Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+            if (d != null)
+            {
+                dm.delete(d);
+            }
+            loadDiagnosis();
         }
-        loadDiagnosis();
     }//GEN-LAST:event_miDeleteActionPerformed
 
     /**

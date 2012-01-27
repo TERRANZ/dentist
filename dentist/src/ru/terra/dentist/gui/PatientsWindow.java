@@ -209,24 +209,30 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
         PatientDTO p = new PatientDTO();
         Integer row = tblPatients.getSelectedRow();
-        p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
-        p.setName((String) tblPatients.getModel().getValueAt(row, 1));
-        p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
-        p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
-        p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
-        npd.setPatient(p);
-        npd.setVisible(true);
+        if (row != -1)
+        {
+            p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
+            p.setName((String) tblPatients.getModel().getValueAt(row, 1));
+            p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
+            p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
+            p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
+            npd.setPatient(p);
+            npd.setVisible(true);
+        }
     }//GEN-LAST:event_miEditActionPerformed
 
     private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
     {//GEN-HEADEREND:event_miDeleteActionPerformed
         Integer row = tblPatients.getSelectedRow();
-        Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
-        if (p != null)
+        if (row != -1)
         {
-            pe.delete(p);
+            Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+            if (p != null)
+            {
+                pe.delete(p);
+            }
+            loadPatients();
         }
-        loadPatients();
     }//GEN-LAST:event_miDeleteActionPerformed
 
     /**
