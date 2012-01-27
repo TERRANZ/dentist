@@ -350,7 +350,7 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
             System.out.println("Patient " + pn + " not found");
         }
         pn = (String) cbDiagnosis.getSelectedItem();
-        Diagnosis d = (Diagnosis) dm.findById(Integer.valueOf(pn.split(" ")[0]));
+        Diagnosis d = (Diagnosis) dm.findByCode(pn.split(" ")[0]);
         if (d != null)
         {
             res.setDiagnosis(d);

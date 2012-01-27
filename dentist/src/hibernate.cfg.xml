@@ -2,11 +2,12 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dentist</property>
+    <property name="hibernate.dialect">dialect.SQLiteDialect</property>
+    <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+    <property name="hibernate.connection.url">jdbc:sqlite:./dentist.db</property>
     <property name="hibernate.connection.username">scan</property>
     <property name="hibernate.connection.password">scan</property>
+    <property name="hibernate.hbm2ddl.auto">none</property>
     <mapping class="ru.terra.dentist.orm.entity.Patient" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Patient.hbm.xml"/>
     <mapping class="ru.terra.dentist.orm.entity.Diagnosis" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Diagnosis.hbm.xml"/>
     <mapping class="ru.terra.dentist.orm.entity.Comment" file="" jar="" package="" resource="ru/terra/dentist/orm/entity/Comment.hbm.xml"/>

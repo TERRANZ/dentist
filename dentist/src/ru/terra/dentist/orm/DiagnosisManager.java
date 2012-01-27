@@ -14,8 +14,15 @@ public class DiagnosisManager extends PersistanceManager
     @Override
     public Object findById(Integer id)
     {
-        Criteria c = session.createCriteria(Diagnosis.class);
-        c.add(Restrictions.eq("diagId", id));
-        return c.uniqueResult();
+	Criteria c = session.createCriteria(Diagnosis.class);
+	c.add(Restrictions.eq("diagId", id));
+	return c.uniqueResult();
+    }
+
+    public Diagnosis findByCode(String code)
+    {
+	Criteria c = session.createCriteria(Diagnosis.class);
+	c.add(Restrictions.eq("diagCode", code));
+	return (Diagnosis) c.uniqueResult();
     }
 }

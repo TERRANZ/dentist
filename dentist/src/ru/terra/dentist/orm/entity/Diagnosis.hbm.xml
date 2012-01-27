@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 26.01.2012 19:42:08 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-  <class catalog="dentist" name="ru.terra.dentist.orm.entity.Diagnosis" table="diagnosis">
+  <class name="ru.terra.dentist.orm.entity.Diagnosis" table="diagnosis">
     <id name="diagId" type="int">
       <column name="diag_id"/>
       <generator class="increment"/>
