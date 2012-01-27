@@ -1,16 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * DiagnosisWindow.java
- *
- * Created on 27.01.2012, 9:21:24
- */
 package ru.terra.dentist.gui;
 
-import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -23,9 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.gui.dialogs.NewDiagDialog;
-import ru.terra.dentist.gui.dialogs.NewPatientDialog;
 import ru.terra.dentist.orm.DiagnosisManager;
-import ru.terra.dentist.orm.dto.DiagnosisDTO;
 import ru.terra.dentist.orm.entity.Diagnosis;
 
 /**
@@ -132,7 +119,8 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
         mrReports = new javax.swing.JMenu();
         miPrintAll = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Диагнозы");
 
         tblPatients.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -189,12 +177,10 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 784, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 314, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
         );
 
@@ -296,6 +282,6 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
     @Override
     public void reload()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        loadDiagnosis();
     }
 }
