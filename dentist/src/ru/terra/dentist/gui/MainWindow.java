@@ -28,6 +28,7 @@ public class MainWindow extends javax.swing.JFrame
         mrPatients = new javax.swing.JMenu();
         miPatList = new javax.swing.JMenuItem();
         mrAppointments = new javax.swing.JMenu();
+        miAppList = new javax.swing.JMenuItem();
         mrDIagnosis = new javax.swing.JMenu();
         miDiagList = new javax.swing.JMenuItem();
         mrReports = new javax.swing.JMenu();
@@ -60,6 +61,15 @@ public class MainWindow extends javax.swing.JFrame
         jMenuBar1.add(mrPatients);
 
         mrAppointments.setText("Приёмы");
+
+        miAppList.setText("Список");
+        miAppList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAppListActionPerformed(evt);
+            }
+        });
+        mrAppointments.add(miAppList);
+
         jMenuBar1.add(mrAppointments);
 
         mrDIagnosis.setText("Диагнозы");
@@ -112,6 +122,12 @@ public class MainWindow extends javax.swing.JFrame
         DiagnosisWindow dw = new DiagnosisWindow();
         dw.setVisible(true);
     }//GEN-LAST:event_miDiagListActionPerformed
+    
+    private void miAppListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAppListActionPerformed
+    {//GEN-HEADEREND:event_miAppListActionPerformed
+        AppointmentsWindow aw = new AppointmentsWindow();
+        aw.setVisible(true);
+    }//GEN-LAST:event_miAppListActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,6 +147,7 @@ public class MainWindow extends javax.swing.JFrame
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem miAppList;
     private javax.swing.JMenuItem miDiagList;
     private javax.swing.JMenuItem miParientsReport;
     private javax.swing.JMenuItem miPatList;

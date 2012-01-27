@@ -20,10 +20,10 @@ import ru.terra.dentist.orm.entity.Diagnosis;
  *
  * @author terranz
  */
-public class ApointmentsWindow extends javax.swing.JFrame implements Reloadable
+public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 {
     /** Creates new form ApointmentsWindow */
-    public ApointmentsWindow()
+    public AppointmentsWindow()
     {
         initComponents();
     }
@@ -73,7 +73,7 @@ public class ApointmentsWindow extends javax.swing.JFrame implements Reloadable
                 tableHeaders.add("Диагноз");
                 tableHeaders.add("Дата приёма");
 
-                for (Object o : am.findAll(Diagnosis.class))
+                for (Object o : am.findAll(Appointment.class))
                 {
                     Vector<Object> oneRow = new Vector<Object>();
                     oneRow.add(((Appointment) o).getId().getAppId());
@@ -221,16 +221,16 @@ public class ApointmentsWindow extends javax.swing.JFrame implements Reloadable
             }
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(ApointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(ApointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(ApointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(ApointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -239,7 +239,7 @@ public class ApointmentsWindow extends javax.swing.JFrame implements Reloadable
         {
             public void run()
             {
-                new ApointmentsWindow().setVisible(true);
+                new AppointmentsWindow().setVisible(true);
             }
         });
     }
