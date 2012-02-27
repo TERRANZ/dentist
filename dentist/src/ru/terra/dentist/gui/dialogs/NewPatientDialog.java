@@ -15,6 +15,7 @@ import ru.terra.dentist.orm.entity.Patient;
  */
 public class NewPatientDialog extends javax.swing.JDialog
 {
+    private int patId;
     /** Creates new form NewPatientDialog */
     public NewPatientDialog(java.awt.Frame parent, boolean modal)
     {
@@ -201,13 +202,14 @@ public class NewPatientDialog extends javax.swing.JDialog
         return btnCancel;
     }
 
-    public Patient getResult()
+    public Patient getResult(boolean newres)
     {
         Patient res = new Patient();
         res.setPatName(tfName.getText());
         res.setPatMidname(tfMiddlename.getText());
         res.setPatSurname(tfSurname.getText());
         res.setPatNum((Integer) spNum.getValue());
+	res.setPatId(newres ? null : patId);
         return res;
     }
 
@@ -217,6 +219,7 @@ public class NewPatientDialog extends javax.swing.JDialog
         tfMiddlename.setText(p.getMidname());
         tfSurname.setText(p.getSurname());
         spNum.setValue(p.getNum());
+	patId = p.getId();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

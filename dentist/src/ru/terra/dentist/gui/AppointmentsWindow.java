@@ -46,7 +46,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
         {
             try
             {
-                am.update(nad.getResult());
+                am.insert(nad.getResult());
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());

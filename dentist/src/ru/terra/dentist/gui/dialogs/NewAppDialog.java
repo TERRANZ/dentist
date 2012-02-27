@@ -69,7 +69,7 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         {
             try
             {
-                dm.update(ndd.getResult());
+                dm.insert(ndd.getResult());
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
@@ -98,7 +98,7 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         {
             try
             {
-                pm.update(npd.getResult());
+                pm.insert(npd.getResult(true));
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
@@ -338,7 +338,7 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         Comment c = new Comment();
         c.setCommentDate(new Date());
         c.setCommentText(taCommentText.getText());
-        am.update(c);
+        am.insert(c);
         res.setComment(c);
         String pn = (String) cbPatient.getSelectedItem();
         Patient p = (Patient) pm.findById(Integer.valueOf(pn.split(" ")[0]));

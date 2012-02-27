@@ -87,7 +87,7 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
         {
             try
             {
-                dm.update(ndd.getResult());
+                dm.insert(ndd.getResult());
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());

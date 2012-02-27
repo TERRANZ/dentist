@@ -96,7 +96,36 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         {
             try
             {
-                pe.update(npd.getResult());
+                pe.insert(npd.getResult(true));
+            } catch (Exception ex)
+            {
+                System.out.println(ex.getMessage());
+            } finally
+            {
+                npd.setVisible(false);
+                npd.dispose();
+                r.reload();
+            }
+        }
+    }
+
+    private class UpdatePatientOkActionListener implements ActionListener
+    {
+        private NewPatientDialog npd;
+        private Reloadable r;
+
+        public UpdatePatientOkActionListener(NewPatientDialog npd, Reloadable r)
+        {
+            this.npd = npd;
+            this.r = r;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            try
+            {
+                pe.update(npd.getResult(false));
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
@@ -207,7 +236,7 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
     private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
     {//GEN-HEADEREND:event_miEditActionPerformed
         NewPatientDialog npd = new NewPatientDialog(this, true);
-        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
+        npd.getOkButton().addActionListener(new UpdatePatientOkActionListener(npd, this));
         PatientDTO p = new PatientDTO();
         Integer row = tblPatients.getSelectedRow();
         if (row != -1)
