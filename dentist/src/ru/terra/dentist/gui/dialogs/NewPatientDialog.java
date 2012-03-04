@@ -16,11 +16,13 @@ import ru.terra.dentist.orm.entity.Patient;
 public class NewPatientDialog extends javax.swing.JDialog
 {
     private int patId;
+    private PatientDTO patient;
+
     /** Creates new form NewPatientDialog */
     public NewPatientDialog(java.awt.Frame parent, boolean modal)
     {
-        super(parent, modal);
-        initComponents();
+	super(parent, modal);
+	initComponents();
     }
 
     /** This method is called from within the constructor to
@@ -135,7 +137,7 @@ public class NewPatientDialog extends javax.swing.JDialog
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelActionPerformed
     {//GEN-HEADEREND:event_btnCancelActionPerformed
-        this.dispose();
+	this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
@@ -143,82 +145,83 @@ public class NewPatientDialog extends javax.swing.JDialog
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	} catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewPatientDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                NewPatientDialog dialog = new NewPatientDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter()
-                {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e)
-                    {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+	/* Create and display the dialog */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		NewPatientDialog dialog = new NewPatientDialog(new javax.swing.JFrame(), true);
+		dialog.addWindowListener(new java.awt.event.WindowAdapter()
+		{
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent e)
+		    {
+			System.exit(0);
+		    }
+		});
+		dialog.setVisible(true);
+	    }
+	});
     }
 
     public JButton getOkButton()
     {
-        return btnOK;
+	return btnOK;
     }
 
     public JButton getCancelButton()
     {
-        return btnCancel;
+	return btnCancel;
     }
 
-    public Patient getResult(boolean newres)
+    public Patient getResult()
     {
-        Patient res = new Patient();
-        res.setPatName(tfName.getText());
-        res.setPatMidname(tfMiddlename.getText());
-        res.setPatSurname(tfSurname.getText());
-        res.setPatNum((Integer) spNum.getValue());
-	res.setPatId(newres ? null : patId);
-        return res;
+	Patient res = new Patient();
+	res.setPatName(tfName.getText());
+	res.setPatMidname(tfMiddlename.getText());
+	res.setPatSurname(tfSurname.getText());
+	res.setPatNum((Integer) spNum.getValue());
+	//res.setPatId(newres ? null : patId);
+	return res;
     }
 
     public void setPatient(PatientDTO p)
     {
-        tfName.setText(p.getName());
-        tfMiddlename.setText(p.getMidname());
-        tfSurname.setText(p.getSurname());
-        spNum.setValue(p.getNum());
+	patient = p;
+	tfName.setText(p.getName());
+	tfMiddlename.setText(p.getMidname());
+	tfSurname.setText(p.getSurname());
+	spNum.setValue(p.getNum());
 	patId = p.getId();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

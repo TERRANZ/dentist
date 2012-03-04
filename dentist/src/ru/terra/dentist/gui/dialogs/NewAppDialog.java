@@ -98,7 +98,7 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         {
             try
             {
-                pm.insert(npd.getResult(true));
+                pm.insert(npd.getResult());
             } catch (Exception ex)
             {
                 System.out.println(ex.getMessage());

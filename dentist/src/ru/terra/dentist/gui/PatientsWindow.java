@@ -27,115 +27,121 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
     /** Creates new form PatientsWindow */
     public PatientsWindow()
     {
-        initComponents();
-        loadPatients();
-        this.setLocationRelativeTo(null);
+	initComponents();
+	loadPatients();
+	this.setLocationRelativeTo(null);
     }
 
     private void loadPatients()
     {
-        ExecutorService pool = Executors.newFixedThreadPool(1);
-        Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
-        {
-            @Override
-            public DefaultTableModel call() throws Exception
-            {
-                Vector<String> tableHeaders = new Vector<String>();
-                Vector tableData = new Vector();
-                tableHeaders.add("Идент");
-                tableHeaders.add("Имя");
-                tableHeaders.add("Отчество");
-                tableHeaders.add("Фамилия");
-                tableHeaders.add("Номер");
+	ExecutorService pool = Executors.newFixedThreadPool(1);
+	Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
+	{
+	    @Override
+	    public DefaultTableModel call() throws Exception
+	    {
+		Vector<String> tableHeaders = new Vector<String>();
+		Vector tableData = new Vector();
+		tableHeaders.add("Идент");
+		tableHeaders.add("Имя");
+		tableHeaders.add("Отчество");
+		tableHeaders.add("Фамилия");
+		tableHeaders.add("Номер");
 
-                for (Object o : pe.findAll(Patient.class))
-                {
-                    Vector<Object> oneRow = new Vector<Object>();
-                    oneRow.add(((Patient) o).getPatId());
-                    oneRow.add(((Patient) o).getPatName());
-                    oneRow.add(((Patient) o).getPatMidname());
-                    oneRow.add(((Patient) o).getPatSurname());
-                    oneRow.add(((Patient) o).getPatNum());
-                    tableData.add(oneRow);
-                }
-                return new DefaultTableModel(tableData, tableHeaders);
-            }
-        };
-        Future<DefaultTableModel> future = pool.submit(loader);
-        try
-        {
-            tblPatients.setModel(future.get());
-        } catch (InterruptedException ex)
-        {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex)
-        {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		for (Object o : pe.findAll(Patient.class))
+		{
+		    Vector<Object> oneRow = new Vector<Object>();
+		    oneRow.add(((Patient) o).getPatId());
+		    oneRow.add(((Patient) o).getPatName());
+		    oneRow.add(((Patient) o).getPatMidname());
+		    oneRow.add(((Patient) o).getPatSurname());
+		    oneRow.add(((Patient) o).getPatNum());
+		    tableData.add(oneRow);
+		}
+		return new DefaultTableModel(tableData, tableHeaders);
+	    }
+	};
+	Future<DefaultTableModel> future = pool.submit(loader);
+	try
+	{
+	    tblPatients.setModel(future.get());
+	} catch (InterruptedException ex)
+	{
+	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (ExecutionException ex)
+	{
+	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
     public void reload()
     {
-        loadPatients();
+	loadPatients();
     }
 
     private class NewPatientOkActionListener implements ActionListener
     {
-        private NewPatientDialog npd;
-        private Reloadable r;
+	private NewPatientDialog npd;
+	private Reloadable r;
 
-        public NewPatientOkActionListener(NewPatientDialog npd, Reloadable r)
-        {
-            this.npd = npd;
-            this.r = r;
-        }
+	public NewPatientOkActionListener(NewPatientDialog npd, Reloadable r)
+	{
+	    this.npd = npd;
+	    this.r = r;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            try
-            {
-                pe.insert(npd.getResult(true));
-            } catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            } finally
-            {
-                npd.setVisible(false);
-                npd.dispose();
-                r.reload();
-            }
-        }
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		pe.insert(npd.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		npd.setVisible(false);
+		npd.dispose();
+		r.reload();
+	    }
+	}
     }
 
     private class UpdatePatientOkActionListener implements ActionListener
     {
-        private NewPatientDialog npd;
-        private Reloadable r;
+	private NewPatientDialog npd;
+	private Reloadable r;
+	private Patient patient;
 
-        public UpdatePatientOkActionListener(NewPatientDialog npd, Reloadable r)
-        {
-            this.npd = npd;
-            this.r = r;
-        }
+	public UpdatePatientOkActionListener(NewPatientDialog npd, Reloadable r, Patient p)
+	{
+	    this.npd = npd;
+	    this.r = r;
+	    this.patient = p;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            try
-            {
-                pe.update(npd.getResult(false));
-            } catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            } finally
-            {
-                npd.setVisible(false);
-                npd.dispose();
-                r.reload();
-            }
-        }
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		patient.setPatMidname(npd.getResult().getPatMidname());
+		patient.setPatName(npd.getResult().getPatName());
+		patient.setPatNum(npd.getResult().getPatNum());
+		patient.setPatSurname(npd.getResult().getPatSurname());
+		pe.update(patient);
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		npd.setVisible(false);
+		npd.dispose();
+		r.reload();
+	    }
+	}
     }
 
     /** This method is called from within the constructor to
@@ -228,41 +234,41 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 
     private void miAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddActionPerformed
     {//GEN-HEADEREND:event_miAddActionPerformed
-        NewPatientDialog npd = new NewPatientDialog(this, true);
-        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
-        npd.setVisible(true);
+	NewPatientDialog npd = new NewPatientDialog(this, true);
+	npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
+	npd.setVisible(true);
     }//GEN-LAST:event_miAddActionPerformed
 
     private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
     {//GEN-HEADEREND:event_miEditActionPerformed
-        NewPatientDialog npd = new NewPatientDialog(this, true);
-        npd.getOkButton().addActionListener(new UpdatePatientOkActionListener(npd, this));
-        PatientDTO p = new PatientDTO();
-        Integer row = tblPatients.getSelectedRow();
-        if (row != -1)
-        {
-            p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
-            p.setName((String) tblPatients.getModel().getValueAt(row, 1));
-            p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
-            p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
-            p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
-            npd.setPatient(p);
-            npd.setVisible(true);
-        }
+	Integer row = tblPatients.getSelectedRow();
+	if (row != -1)
+	{
+	    NewPatientDialog npd = new NewPatientDialog(this, true);
+	    npd.getOkButton().addActionListener(new UpdatePatientOkActionListener(npd, this, (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0))));
+	    PatientDTO p = new PatientDTO();
+	    p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
+	    p.setName((String) tblPatients.getModel().getValueAt(row, 1));
+	    p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
+	    p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
+	    p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
+	    npd.setPatient(p);
+	    npd.setVisible(true);
+	}
     }//GEN-LAST:event_miEditActionPerformed
 
     private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
     {//GEN-HEADEREND:event_miDeleteActionPerformed
-        Integer row = tblPatients.getSelectedRow();
-        if (row != -1)
-        {
-            Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
-            if (p != null)
-            {
-                pe.delete(p);
-            }
-            loadPatients();
-        }
+	Integer row = tblPatients.getSelectedRow();
+	if (row != -1)
+	{
+	    Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+	    if (p != null)
+	    {
+		pe.delete(p);
+	    }
+	    loadPatients();
+	}
     }//GEN-LAST:event_miDeleteActionPerformed
 
     /**
@@ -270,14 +276,14 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
      */
     public static void main(String args[])
     {
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                new PatientsWindow().setVisible(true);
-            }
-        });
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		new PatientsWindow().setVisible(true);
+	    }
+	});
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
