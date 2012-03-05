@@ -38,10 +38,10 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="tfName" alignment="1" pref="140" max="32767" attributes="0"/>
-                          <Component id="tfSurname" alignment="1" pref="140" max="32767" attributes="0"/>
-                          <Component id="spNum" alignment="0" pref="140" max="32767" attributes="0"/>
-                          <Component id="tfMiddlename" alignment="0" pref="140" max="32767" attributes="0"/>
+                          <Component id="tfName" alignment="1" pref="147" max="32767" attributes="0"/>
+                          <Component id="tfSurname" alignment="1" pref="147" max="32767" attributes="0"/>
+                          <Component id="spNum" alignment="0" pref="147" max="32767" attributes="0"/>
+                          <Component id="tfMiddlename" alignment="0" pref="147" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">

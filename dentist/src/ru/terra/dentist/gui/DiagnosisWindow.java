@@ -26,78 +26,107 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
     /** Creates new form DiagnosisWindow */
     public DiagnosisWindow()
     {
-        initComponents();
-        loadDiagnosis();
-        this.setLocationRelativeTo(null);
+	initComponents();
+	loadDiagnosis();
+	this.setLocationRelativeTo(null);
     }
 
     private void loadDiagnosis()
     {
-        ExecutorService pool = Executors.newFixedThreadPool(1);
-        Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
-        {
-            @Override
-            public DefaultTableModel call() throws Exception
-            {
-                Vector<String> tableHeaders = new Vector<String>();
-                Vector tableData = new Vector();
-                tableHeaders.add("Идент");
-                tableHeaders.add("Наименование");
-                tableHeaders.add("Код");
-                tableHeaders.add("Цена");
+	ExecutorService pool = Executors.newFixedThreadPool(1);
+	Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
+	{
+	    @Override
+	    public DefaultTableModel call() throws Exception
+	    {
+		Vector<String> tableHeaders = new Vector<String>();
+		Vector tableData = new Vector();
+		tableHeaders.add("Идент");
+		tableHeaders.add("Наименование");
+		tableHeaders.add("Код");
+		tableHeaders.add("Цена");
 
-                for (Object o : dm.findAll(Diagnosis.class))
-                {
-                    Vector<Object> oneRow = new Vector<Object>();
-                    oneRow.add(((Diagnosis) o).getDiagId());
-                    oneRow.add(((Diagnosis) o).getDiagName());
-                    oneRow.add(((Diagnosis) o).getDiagCode());
-                    oneRow.add(((Diagnosis) o).getDiagPrice());
-                    tableData.add(oneRow);
-                }
-                return new DefaultTableModel(tableData, tableHeaders);
-            }
-        };
-        Future<DefaultTableModel> future = pool.submit(loader);
-        try
-        {
-            tblPatients.setModel(future.get());
-        } catch (InterruptedException ex)
-        {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex)
-        {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		for (Object o : dm.findAll(Diagnosis.class))
+		{
+		    Vector<Object> oneRow = new Vector<Object>();
+		    oneRow.add(((Diagnosis) o).getDiagId());
+		    oneRow.add(((Diagnosis) o).getDiagName());
+		    oneRow.add(((Diagnosis) o).getDiagCode());
+		    oneRow.add(((Diagnosis) o).getDiagPrice());
+		    tableData.add(oneRow);
+		}
+		return new DefaultTableModel(tableData, tableHeaders);
+	    }
+	};
+	Future<DefaultTableModel> future = pool.submit(loader);
+	try
+	{
+	    tblPatients.setModel(future.get());
+	} catch (InterruptedException ex)
+	{
+	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (ExecutionException ex)
+	{
+	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
+
+    private class UpdateDiagOkActionListener implements ActionListener
+    {
+	private NewDiagDialog ndd;
+	private Reloadable r;
+
+	public UpdateDiagOkActionListener(NewDiagDialog ndd, Reloadable r)
+	{
+	    this.ndd = ndd;
+	    this.r = r;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		dm.update(ndd.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		ndd.setVisible(false);
+		ndd.dispose();
+		r.reload();
+	    }
+	}
     }
 
     private class NewDiagOkActionListener implements ActionListener
     {
-        private NewDiagDialog ndd;
-        private Reloadable r;
+	private NewDiagDialog ndd;
+	private Reloadable r;
 
-        public NewDiagOkActionListener(NewDiagDialog ndd, Reloadable r)
-        {
-            this.ndd = ndd;
-            this.r = r;
-        }
+	public NewDiagOkActionListener(NewDiagDialog ndd, Reloadable r)
+	{
+	    this.ndd = ndd;
+	    this.r = r;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            try
-            {
-                dm.insert(ndd.getResult());
-            } catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            } finally
-            {
-                ndd.setVisible(false);
-                ndd.dispose();
-                r.reload();
-            }
-        }
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		dm.insert(ndd.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		ndd.setVisible(false);
+		ndd.dispose();
+		r.reload();
+	    }
+	}
     }
 
     /** This method is called from within the constructor to
@@ -190,40 +219,37 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
 
     private void miAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAddActionPerformed
     {//GEN-HEADEREND:event_miAddActionPerformed
-        NewDiagDialog ndd = new NewDiagDialog(this, true);
-        ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
-        ndd.setVisible(true);
+	NewDiagDialog ndd = new NewDiagDialog(this, true);
+	ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
+	ndd.setVisible(true);
     }//GEN-LAST:event_miAddActionPerformed
 
     private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
     {//GEN-HEADEREND:event_miEditActionPerformed
-        NewDiagDialog ndd = new NewDiagDialog(this, true);
-        ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
-        Diagnosis d = new Diagnosis();
-        Integer row = tblPatients.getSelectedRow();
-        if (row != -1)
-        {
-            d.setDiagId((Integer) tblPatients.getModel().getValueAt(row, 0));
-            d.setDiagName((String) tblPatients.getModel().getValueAt(row, 1));
-            d.setDiagCode((String) tblPatients.getModel().getValueAt(row, 2));
-            d.setDiagPrice((Integer) tblPatients.getModel().getValueAt(row, 3));
-            ndd.setDiagnosis(d);
-            ndd.setVisible(true);
-        }
+
+	Integer row = tblPatients.getSelectedRow();
+	if (row != -1)
+	{
+	    NewDiagDialog ndd = new NewDiagDialog(this, true);
+	    ndd.getOkButton().addActionListener(new UpdateDiagOkActionListener(ndd, this));
+	    Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+	    ndd.setDiagnosis(d);
+	    ndd.setVisible(true);
+	}
     }//GEN-LAST:event_miEditActionPerformed
 
     private void miDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miDeleteActionPerformed
     {//GEN-HEADEREND:event_miDeleteActionPerformed
-        Integer row = tblPatients.getSelectedRow();
-        if (row != -1)
-        {
-            Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
-            if (d != null)
-            {
-                dm.delete(d);
-            }
-            loadDiagnosis();
-        }
+	Integer row = tblPatients.getSelectedRow();
+	if (row != -1)
+	{
+	    Diagnosis d = (Diagnosis) dm.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+	    if (d != null)
+	    {
+		dm.delete(d);
+	    }
+	    loadDiagnosis();
+	}
     }//GEN-LAST:event_miDeleteActionPerformed
 
     /**
@@ -231,44 +257,44 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	} catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(DiagnosisWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new DiagnosisWindow().setVisible(true);
-            }
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		new DiagnosisWindow().setVisible(true);
+	    }
+	});
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
@@ -286,6 +312,6 @@ public class DiagnosisWindow extends javax.swing.JFrame implements Reloadable
     @Override
     public void reload()
     {
-        loadDiagnosis();
+	loadDiagnosis();
     }
 }

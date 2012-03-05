@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.gui.dialogs.NewPatientDialog;
 import ru.terra.dentist.orm.PatientManager;
-import ru.terra.dentist.orm.dto.PatientDTO;
 import ru.terra.dentist.orm.entity.Patient;
 
 /**
@@ -245,13 +244,8 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 	if (row != -1)
 	{
 	    NewPatientDialog npd = new NewPatientDialog(this, true);
-	    npd.getOkButton().addActionListener(new UpdatePatientOkActionListener(npd, this, (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0))));
-	    PatientDTO p = new PatientDTO();
-	    p.setId((Integer) tblPatients.getModel().getValueAt(row, 0));
-	    p.setName((String) tblPatients.getModel().getValueAt(row, 1));
-	    p.setMidname((String) tblPatients.getModel().getValueAt(row, 2));
-	    p.setSurname((String) tblPatients.getModel().getValueAt(row, 3));
-	    p.setNum((Integer) tblPatients.getModel().getValueAt(row, 4));
+	    Patient p = (Patient) pe.findById((Integer) tblPatients.getModel().getValueAt(row, 0));
+	    npd.getOkButton().addActionListener(new UpdatePatientOkActionListener(npd, this, p));	    
 	    npd.setPatient(p);
 	    npd.setVisible(true);
 	}

@@ -6,7 +6,6 @@
 package ru.terra.dentist.gui.dialogs;
 
 import javax.swing.JButton;
-import ru.terra.dentist.orm.dto.PatientDTO;
 import ru.terra.dentist.orm.entity.Patient;
 
 /**
@@ -15,8 +14,7 @@ import ru.terra.dentist.orm.entity.Patient;
  */
 public class NewPatientDialog extends javax.swing.JDialog
 {
-    private int patId;
-    private PatientDTO patient;
+    private Patient patient;
 
     /** Creates new form NewPatientDialog */
     public NewPatientDialog(java.awt.Frame parent, boolean modal)
@@ -205,24 +203,22 @@ public class NewPatientDialog extends javax.swing.JDialog
     }
 
     public Patient getResult()
-    {
-	Patient res = new Patient();
-	res.setPatName(tfName.getText());
-	res.setPatMidname(tfMiddlename.getText());
-	res.setPatSurname(tfSurname.getText());
-	res.setPatNum((Integer) spNum.getValue());
+    {	
+	patient.setPatName(tfName.getText());
+	patient.setPatMidname(tfMiddlename.getText());
+	patient.setPatSurname(tfSurname.getText());
+	patient.setPatNum((Integer) spNum.getValue());
 	//res.setPatId(newres ? null : patId);
-	return res;
+	return patient;
     }
 
-    public void setPatient(PatientDTO p)
+    public void setPatient(Patient p)
     {
 	patient = p;
-	tfName.setText(p.getName());
-	tfMiddlename.setText(p.getMidname());
-	tfSurname.setText(p.getSurname());
-	spNum.setValue(p.getNum());
-	patId = p.getId();
+	tfName.setText(p.getPatName());
+	tfMiddlename.setText(p.getPatMidname());
+	tfSurname.setText(p.getPatSurname());
+	spNum.setValue(p.getPatNum());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

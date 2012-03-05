@@ -19,6 +19,8 @@ import ru.terra.dentist.orm.entity.Diagnosis;
  */
 public class NewDiagDialog extends javax.swing.JDialog
 {
+
+    private Diagnosis diagnosis;
     /** Creates new form NewDiagDialog */
     public NewDiagDialog(java.awt.Frame parent, boolean modal)
     {
@@ -180,16 +182,16 @@ public class NewDiagDialog extends javax.swing.JDialog
     }
     
     public Diagnosis getResult()
-    {
-        Diagnosis res = new Diagnosis();
-        res.setDiagName(tfName.getText());
-        res.setDiagCode(tfCode.getText());
-        res.setDiagPrice((Integer) spPrice.getValue());        
-        return res;
+    {        
+        diagnosis.setDiagName(tfName.getText());
+        diagnosis.setDiagCode(tfCode.getText());
+        diagnosis.setDiagPrice((Integer) spPrice.getValue());
+        return diagnosis;
     }
     
     public void setDiagnosis(Diagnosis d)
     {
+	diagnosis = d;
         tfName.setText(d.getDiagName());
         tfCode.setText(d.getDiagCode());
         spPrice.setValue(d.getDiagPrice());

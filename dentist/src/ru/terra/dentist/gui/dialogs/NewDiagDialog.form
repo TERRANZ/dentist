@@ -40,7 +40,7 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="btnOK" pref="93" max="32767" attributes="1"/>
+                      <Component id="btnOK" pref="98" max="32767" attributes="1"/>
                       <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
                       <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
                   </Group>
