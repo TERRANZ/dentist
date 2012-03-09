@@ -203,7 +203,9 @@ public class NewPatientDialog extends javax.swing.JDialog
     }
 
     public Patient getResult()
-    {	
+    {
+	if (patient == null)
+	    patient = new Patient();
 	patient.setPatName(tfName.getText());
 	patient.setPatMidname(tfMiddlename.getText());
 	patient.setPatSurname(tfSurname.getText());

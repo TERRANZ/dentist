@@ -182,7 +182,9 @@ public class NewDiagDialog extends javax.swing.JDialog
     }
     
     public Diagnosis getResult()
-    {        
+    {
+	if (diagnosis == null)
+	    diagnosis = new Diagnosis();
         diagnosis.setDiagName(tfName.getText());
         diagnosis.setDiagCode(tfCode.getText());
         diagnosis.setDiagPrice((Integer) spPrice.getValue());
