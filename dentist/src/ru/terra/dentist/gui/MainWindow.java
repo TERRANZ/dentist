@@ -1,5 +1,7 @@
 package ru.terra.dentist.gui;
 
+import ru.terra.dentist.report.PatientsReport;
+
 /**
  *
  * @author terranz
@@ -88,6 +90,11 @@ public class MainWindow extends javax.swing.JFrame
         mrReports.setText("Отчёты");
 
         miParientsReport.setText("Отчёт по пациентам");
+        miParientsReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miParientsReportActionPerformed(evt);
+            }
+        });
         mrReports.add(miParientsReport);
 
         jMenuBar1.add(mrReports);
@@ -129,6 +136,13 @@ public class MainWindow extends javax.swing.JFrame
         AppointmentsWindow aw = new AppointmentsWindow();
         aw.setVisible(true);
     }//GEN-LAST:event_miAppListActionPerformed
+
+    private void miParientsReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miParientsReportActionPerformed
+    {//GEN-HEADEREND:event_miParientsReportActionPerformed
+                // TODO add your handling code here:
+        PatientsReport pr = new PatientsReport();
+        pr.allPatientsReport();
+    }//GEN-LAST:event_miParientsReportActionPerformed
 
     /**
      * @param args the command line arguments
