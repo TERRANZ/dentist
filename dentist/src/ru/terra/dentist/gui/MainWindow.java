@@ -2,6 +2,8 @@ package ru.terra.dentist.gui;
 
 import ru.terra.dentist.report.AppointmentsReport;
 import ru.terra.dentist.report.PatientReports;
+import ru.terra.dentist.report.PatientsReport;
+
 
 /**
  *
@@ -149,6 +151,7 @@ public class MainWindow extends javax.swing.JFrame
 
     private void miParientsReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miParientsReportActionPerformed
     {//GEN-HEADEREND:event_miParientsReportActionPerformed
+
 	// TODO add your handling code here:
 	PatientReports rep = new PatientReports();
 	rep.allPatientsReport();
