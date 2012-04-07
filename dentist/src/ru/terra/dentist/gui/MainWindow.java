@@ -1,5 +1,8 @@
 package ru.terra.dentist.gui;
 
+import ru.terra.dentist.report.AppointmentsReport;
+import ru.terra.dentist.report.PatientReports;
+
 /**
  *
  * @author terranz
@@ -34,6 +37,7 @@ public class MainWindow extends javax.swing.JFrame
         miDiagList = new javax.swing.JMenuItem();
         mrReports = new javax.swing.JMenu();
         miParientsReport = new javax.swing.JMenuItem();
+        miAllAppointmentsReport = new javax.swing.JMenuItem();
 
         jMenu4.setText("File");
         jMenuBar2.add(jMenu4);
@@ -88,7 +92,20 @@ public class MainWindow extends javax.swing.JFrame
         mrReports.setText("Отчёты");
 
         miParientsReport.setText("Отчёт по пациентам");
+        miParientsReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miParientsReportActionPerformed(evt);
+            }
+        });
         mrReports.add(miParientsReport);
+
+        miAllAppointmentsReport.setText("Отчёт по приёмам");
+        miAllAppointmentsReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAllAppointmentsReportActionPerformed(evt);
+            }
+        });
+        mrReports.add(miAllAppointmentsReport);
 
         jMenuBar1.add(mrReports);
 
@@ -130,6 +147,20 @@ public class MainWindow extends javax.swing.JFrame
         aw.setVisible(true);
     }//GEN-LAST:event_miAppListActionPerformed
 
+    private void miParientsReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miParientsReportActionPerformed
+    {//GEN-HEADEREND:event_miParientsReportActionPerformed
+	// TODO add your handling code here:
+	PatientReports rep = new PatientReports();
+	rep.allPatientsReport();
+    }//GEN-LAST:event_miParientsReportActionPerformed
+
+    private void miAllAppointmentsReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miAllAppointmentsReportActionPerformed
+    {//GEN-HEADEREND:event_miAllAppointmentsReportActionPerformed
+	// TODO add your handling code here:
+	AppointmentsReport report = new AppointmentsReport();
+	report.allAppointmentsReport();
+    }//GEN-LAST:event_miAllAppointmentsReportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -148,6 +179,7 @@ public class MainWindow extends javax.swing.JFrame
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem miAllAppointmentsReport;
     private javax.swing.JMenuItem miAppList;
     private javax.swing.JMenuItem miDiagList;
     private javax.swing.JMenuItem miParientsReport;

@@ -10,16 +10,16 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class AppointmentId implements java.io.Serializable
 {
-    private int appId;
-    private int patId;
-    private int diagId;
-    private int commentId;
+    private Integer appId;
+    private Integer patId;
+    private Integer diagId;
+    private Integer commentId;
 
     public AppointmentId()
     {
     }
 
-    public AppointmentId(int appId, int patId, int diagId, int commentId)
+    public AppointmentId(Integer appId, Integer patId, Integer diagId, Integer commentId)
     {
         this.appId = appId;
         this.patId = patId;
@@ -28,45 +28,45 @@ public class AppointmentId implements java.io.Serializable
     }
 
     @Column(name = "app_id", nullable = false)
-    public int getAppId()
+    public Integer getAppId()
     {
         return this.appId;
     }
 
-    public void setAppId(int appId)
+    public void setAppId(Integer appId)
     {
         this.appId = appId;
     }
 
     @Column(name = "pat_id", nullable = false)
-    public int getPatId()
+    public Integer getPatId()
     {
         return this.patId;
     }
 
-    public void setPatId(int patId)
+    public void setPatId(Integer patId)
     {
         this.patId = patId;
     }
 
     @Column(name = "diag_id", nullable = false)
-    public int getDiagId()
+    public Integer getDiagId()
     {
         return this.diagId;
     }
 
-    public void setDiagId(int diagId)
+    public void setDiagId(Integer diagId)
     {
         this.diagId = diagId;
     }
 
     @Column(name = "comment_id", nullable = false)
-    public int getCommentId()
+    public Integer getCommentId()
     {
         return this.commentId;
     }
 
-    public void setCommentId(int commentId)
+    public void setCommentId(Integer commentId)
     {
         this.commentId = commentId;
     }

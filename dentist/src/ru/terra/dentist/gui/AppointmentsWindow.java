@@ -2,6 +2,7 @@ package ru.terra.dentist.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -14,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.gui.dialogs.NewAppDialog;
 import ru.terra.dentist.orm.AppointmentsManager;
 import ru.terra.dentist.orm.entity.Appointment;
+import ru.terra.dentist.report.AppointmentsReport;
 
 /**
  *
@@ -21,82 +23,114 @@ import ru.terra.dentist.orm.entity.Appointment;
  */
 public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 {
+    private ArrayList<Appointment> cache;
+
     /** Creates new form ApointmentsWindow */
     public AppointmentsWindow()
     {
-        initComponents();
-        loadApp();
-        this.setLocationRelativeTo(null);
+	initComponents();
+	loadApp();
+	this.setLocationRelativeTo(null);
     }
     AppointmentsManager am = new AppointmentsManager();
 
     private class NewAppDialogOkListener implements ActionListener
     {
-        private NewAppDialog nad;
-        private Reloadable r;
+	private NewAppDialog nad;
+	private Reloadable r;
 
-        public NewAppDialogOkListener(NewAppDialog nad, Reloadable r)
-        {
-            this.nad = nad;
-            this.r = r;
-        }
+	public NewAppDialogOkListener(NewAppDialog nad, Reloadable r)
+	{
+	    this.nad = nad;
+	    this.r = r;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            try
-            {
-                am.insert(nad.getResult());
-            } catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            } finally
-            {
-                nad.setVisible(false);
-                nad.dispose();
-                r.reload();
-            }
-        }
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		am.insert(nad.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		nad.setVisible(false);
+		nad.dispose();
+		r.reload();
+	    }
+	}
+    }
+
+    private class UpdateAppDialogOkListener implements ActionListener
+    {
+	private NewAppDialog nad;
+	private Reloadable r;
+
+	public UpdateAppDialogOkListener(NewAppDialog nad, Reloadable r)
+	{
+	    this.nad = nad;
+	    this.r = r;
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		am.update(nad.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		nad.setVisible(false);
+		nad.dispose();
+		r.reload();
+	    }
+	}
     }
 
     private void loadApp()
     {
-        ExecutorService pool = Executors.newFixedThreadPool(1);
-        Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
-        {
-            @Override
-            public DefaultTableModel call() throws Exception
-            {
-                Vector<String> tableHeaders = new Vector<String>();
-                Vector tableData = new Vector();
-                tableHeaders.add("Идент");
-                tableHeaders.add("Пациент");
-                tableHeaders.add("Диагноз");
-                tableHeaders.add("Дата приёма");
+	ExecutorService pool = Executors.newFixedThreadPool(1);
+	Callable<DefaultTableModel> loader = new Callable<DefaultTableModel>()
+	{
+	    @Override
+	    public DefaultTableModel call() throws Exception
+	    {
+		cache = new ArrayList<Appointment>();
+		Vector<String> tableHeaders = new Vector<String>();
+		Vector tableData = new Vector();
+		tableHeaders.add("Идент");
+		tableHeaders.add("Пациент");
+		tableHeaders.add("Диагноз");
+		tableHeaders.add("Дата приёма");
 
-                for (Object o : am.findAll(Appointment.class))
-                {
-                    Vector<Object> oneRow = new Vector<Object>();
-                    oneRow.add(((Appointment) o).getId().getAppId());
-                    oneRow.add(((Appointment) o).getPatient().getPatName());
-                    oneRow.add(((Appointment) o).getDiagnosis().getDiagName());
-                    oneRow.add(((Appointment) o).getAppDate());
-                    tableData.add(oneRow);
-                }
-                return new DefaultTableModel(tableData, tableHeaders);
-            }
-        };
-        Future<DefaultTableModel> future = pool.submit(loader);
-        try
-        {
-            tblApps.setModel(future.get());
-        } catch (InterruptedException ex)
-        {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex)
-        {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+		for (Object o : am.findAll(Appointment.class))
+		{
+		    cache.add((Appointment) o);
+		    Vector<Object> oneRow = new Vector<Object>();
+		    oneRow.add(((Appointment) o).getId().getAppId());
+		    oneRow.add(((Appointment) o).getPatient().getPatName());
+		    oneRow.add(((Appointment) o).getDiagnosis().getDiagName());
+		    oneRow.add(((Appointment) o).getAppDate());
+		    tableData.add(oneRow);
+		}
+		return new DefaultTableModel(tableData, tableHeaders);
+	    }
+	};
+	Future<DefaultTableModel> future = pool.submit(loader);
+	try
+	{
+	    tblApps.setModel(future.get());
+	} catch (InterruptedException ex)
+	{
+	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (ExecutionException ex)
+	{
+	    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     /** This method is called from within the constructor to
@@ -162,6 +196,11 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
         mrReports.setText("Отчёты");
 
         miPrintList.setText("Список");
+        miPrintList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPrintListActionPerformed(evt);
+            }
+        });
         mrReports.add(miPrintList);
 
         jMenuBar1.add(mrReports);
@@ -184,67 +223,74 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 
     private void miNewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miNewActionPerformed
     {//GEN-HEADEREND:event_miNewActionPerformed
-        NewAppDialog nad = new NewAppDialog(this, true);
-        nad.getOkButton().addActionListener(new NewAppDialogOkListener(nad, this));
-        nad.setVisible(true);
+	NewAppDialog nad = new NewAppDialog(this, true);
+	nad.getOkButton().addActionListener(new NewAppDialogOkListener(nad, this));
+	nad.setVisible(true);
     }//GEN-LAST:event_miNewActionPerformed
 
     private void miEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miEditActionPerformed
     {//GEN-HEADEREND:event_miEditActionPerformed
-        NewAppDialog nad = new NewAppDialog(this, true);
-        nad.getOkButton().addActionListener(new NewAppDialogOkListener(nad, this));
-        Appointment a = new Appointment();
-        Integer row = tblApps.getSelectedRow();
-        if (row != -1)
-        {
-        }
-        nad.setApp(a);
-        nad.setVisible(true);
+	NewAppDialog nad = new NewAppDialog(this, true);
+	nad.getOkButton().addActionListener(new UpdateAppDialogOkListener(nad, this));
+	Appointment a = new Appointment();
+	Integer row = tblApps.getSelectedRow();
+	if (row != -1)
+	{
+	    a = cache.get(row);
+	}
+	nad.setApp(a);
+	nad.setVisible(true);
     }//GEN-LAST:event_miEditActionPerformed
+
+    private void miPrintListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miPrintListActionPerformed
+    {//GEN-HEADEREND:event_miPrintListActionPerformed
+	AppointmentsReport rep = new AppointmentsReport();
+	rep.allAppointmentsReport();
+    }//GEN-LAST:event_miPrintListActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	} catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(AppointmentsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new AppointmentsWindow().setVisible(true);
-            }
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		new AppointmentsWindow().setVisible(true);
+	    }
+	});
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
@@ -262,6 +308,6 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
     @Override
     public void reload()
     {
-        loadApp();
+	loadApp();
     }
 }

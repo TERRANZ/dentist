@@ -79,6 +79,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x447;&#x451;&#x442; &#x43f;&#x43e; &#x43f;&#x430;&#x446;&#x438;&#x435;&#x43d;&#x442;&#x430;&#x43c;"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miParientsReportActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="miAllAppointmentsReport">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x447;&#x451;&#x442; &#x43f;&#x43e; &#x43f;&#x440;&#x438;&#x451;&#x43c;&#x430;&#x43c;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miAllAppointmentsReportActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

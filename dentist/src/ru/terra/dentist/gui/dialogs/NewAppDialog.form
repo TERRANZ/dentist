@@ -214,6 +214,9 @@
       </Properties>
     </Component>
     <Component class="com.michaelbaranov.microba.calendar.DatePicker" name="dpDate">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dpDateActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

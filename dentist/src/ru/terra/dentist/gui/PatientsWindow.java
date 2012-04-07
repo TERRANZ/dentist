@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.gui.dialogs.NewPatientDialog;
 import ru.terra.dentist.orm.PatientManager;
 import ru.terra.dentist.orm.entity.Patient;
+import ru.terra.dentist.report.PatientReports;
 
 /**
  *
@@ -211,6 +212,11 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
         mrReports.setText("Отчёты");
 
         miPrintAll.setText("Распечатать список");
+        miPrintAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPrintAllActionPerformed(evt);
+            }
+        });
         mrReports.add(miPrintAll);
 
         jMenuBar1.add(mrReports);
@@ -264,6 +270,13 @@ public class PatientsWindow extends javax.swing.JFrame implements Reloadable
 	    loadPatients();
 	}
     }//GEN-LAST:event_miDeleteActionPerformed
+
+    private void miPrintAllActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miPrintAllActionPerformed
+    {//GEN-HEADEREND:event_miPrintAllActionPerformed
+	// TODO add your handling code here:
+	PatientReports rep = new PatientReports();
+	rep.allPatientsReport();
+    }//GEN-LAST:event_miPrintAllActionPerformed
 
     /**
      * @param args the command line arguments

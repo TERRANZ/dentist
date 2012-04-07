@@ -1,5 +1,8 @@
 package ru.terra.dentist.gui.dialogs;
 
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import ru.terra.dentist.gui.Reloadable;
 import ru.terra.dentist.orm.AppointmentsManager;
@@ -24,91 +27,102 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
     private static DiagnosisManager dm = new DiagnosisManager();
     private static AppointmentsManager am = new AppointmentsManager();
     private static PatientManager pm = new PatientManager();
+    private Appointment app;
 
     /** Creates new form NewAppDialog */
     public NewAppDialog(java.awt.Frame parent, boolean modal)
     {
-        super(parent, modal);
-        initComponents();
-        loadDialog();
+	super(parent, modal);
+	initComponents();
+	loadDialog();
     }
 
     public void setApp(Appointment a)
     {
+	try
+	{
+	    this.app = a;
+	    dpDate.setDate(app.getAppDate());
+//	    cbPatient.setSelectedIndex(a.getPatient().getPatId());
+//	    cbDiagnosis.setSelectedIndex(a.getDiagnosis().getDiagId());
+	} catch (PropertyVetoException ex)
+	{
+	    Logger.getLogger(NewAppDialog.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     private void loadDialog()
     {
-        List<Object> patients = pm.findAll(Patient.class);
-        List<Object> diagnosises = dm.findAll(Diagnosis.class);
-        cbPatient.removeAllItems();
-        cbDiagnosis.removeAllItems();
-        for (Object p : patients)
-        {
-            cbPatient.addItem((String) String.valueOf(((Patient) p).getPatId()) + " " + ((Patient) p).getPatSurname() + ((Patient) p).getPatName());
-        }
-        for (Object d : diagnosises)
-        {
-            cbDiagnosis.addItem(((Diagnosis) d).getDiagCode() + " " + ((Diagnosis) d).getDiagName());
-        }
+	List<Object> patients = pm.findAll(Patient.class);
+	List<Object> diagnosises = dm.findAll(Diagnosis.class);
+	cbPatient.removeAllItems();
+	cbDiagnosis.removeAllItems();
+	for (Object p : patients)
+	{
+	    cbPatient.addItem((String) String.valueOf(((Patient) p).getPatId()) + " " + ((Patient) p).getPatSurname() + " " + ((Patient) p).getPatName());
+	}
+	for (Object d : diagnosises)
+	{
+	    cbDiagnosis.addItem(((Diagnosis) d).getDiagCode() + " " + ((Diagnosis) d).getDiagName());
+	}
     }
 
     private class NewDiagOkActionListener implements ActionListener
     {
-        private NewDiagDialog ndd;
-        private Reloadable r;
+	private NewDiagDialog ndd;
+	private Reloadable r;
 
-        public NewDiagOkActionListener(NewDiagDialog ndd, Reloadable r)
-        {
-            this.ndd = ndd;
-            this.r = r;
-        }
+	public NewDiagOkActionListener(NewDiagDialog ndd, Reloadable r)
+	{
+	    this.ndd = ndd;
+	    this.r = r;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            try
-            {
-                dm.insert(ndd.getResult());
-            } catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            } finally
-            {
-                ndd.setVisible(false);
-                ndd.dispose();
-                r.reload();
-            }
-        }
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		dm.insert(ndd.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		ndd.setVisible(false);
+		ndd.dispose();
+		r.reload();
+	    }
+	}
     }
 
     private class NewPatientOkActionListener implements ActionListener
     {
-        private NewPatientDialog npd;
-        private Reloadable r;
+	private NewPatientDialog npd;
+	private Reloadable r;
 
-        public NewPatientOkActionListener(NewPatientDialog npd, Reloadable r)
-        {
-            this.npd = npd;
-            this.r = r;
-        }
+	public NewPatientOkActionListener(NewPatientDialog npd, Reloadable r)
+	{
+	    this.npd = npd;
+	    this.r = r;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            try
-            {
-                pm.insert(npd.getResult());
-            } catch (Exception ex)
-            {
-                System.out.println(ex.getMessage());
-            } finally
-            {
-                npd.setVisible(false);
-                npd.dispose();
-                r.reload();
-            }
-        }
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+	    try
+	    {
+		pm.insert(npd.getResult());
+	    } catch (Exception ex)
+	    {
+		System.out.println(ex.getMessage());
+	    } finally
+	    {
+		npd.setVisible(false);
+		npd.dispose();
+		r.reload();
+	    }
+	}
     }
 
     /** This method is called from within the constructor to
@@ -178,6 +192,12 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
         });
 
         btnPrint.setText("Распечатать");
+
+        dpDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dpDateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -259,119 +279,127 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
 
     private void brnNewPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_brnNewPatientActionPerformed
     {//GEN-HEADEREND:event_brnNewPatientActionPerformed
-        NewPatientDialog npd = new NewPatientDialog(null, true);
-        npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
-        npd.setVisible(true);
+	NewPatientDialog npd = new NewPatientDialog(null, true);
+	npd.getOkButton().addActionListener(new NewPatientOkActionListener(npd, this));
+	npd.setVisible(true);
     }//GEN-LAST:event_brnNewPatientActionPerformed
 
     private void btnNewDiagActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnNewDiagActionPerformed
     {//GEN-HEADEREND:event_btnNewDiagActionPerformed
-        NewDiagDialog ndd = new NewDiagDialog(null, true);
-        ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
-        ndd.setVisible(true);
+	NewDiagDialog ndd = new NewDiagDialog(null, true);
+	ndd.getOkButton().addActionListener(new NewDiagOkActionListener(ndd, this));
+	ndd.setVisible(true);
     }//GEN-LAST:event_btnNewDiagActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelActionPerformed
     {//GEN-HEADEREND:event_btnCancelActionPerformed
-        this.dispose();
+	this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void dpDateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_dpDateActionPerformed
+    {//GEN-HEADEREND:event_dpDateActionPerformed
+	// TODO add your handling code here:
+    }//GEN-LAST:event_dpDateActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	} catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	} catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(NewAppDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                NewAppDialog dialog = new NewAppDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter()
-                {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e)
-                    {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+	/* Create and display the dialog */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		NewAppDialog dialog = new NewAppDialog(new javax.swing.JFrame(), true);
+		dialog.addWindowListener(new java.awt.event.WindowAdapter()
+		{
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent e)
+		    {
+			System.exit(0);
+		    }
+		});
+		dialog.setVisible(true);
+	    }
+	});
     }
 
     public Appointment getResult()
     {
-        Appointment res = new Appointment();
-        res.setAppDate(dpDate.getDate());
-        Comment c = new Comment();
-        c.setCommentDate(new Date());
-        c.setCommentText(taCommentText.getText());
-        am.insert(c);
-        res.setComment(c);
-        String pn = (String) cbPatient.getSelectedItem();
-        Patient p = (Patient) pm.findById(Integer.valueOf(pn.split(" ")[0]));
-        if (p != null)
-        {
-            res.setPatient(p);
-        } else
-        {
-            System.out.println("Patient " + pn + " not found");
-        }
-        pn = (String) cbDiagnosis.getSelectedItem();
-        Diagnosis d = (Diagnosis) dm.findByCode(pn.split(" ")[0]);
-        if (d != null)
-        {
-            res.setDiagnosis(d);
-        } else
-        {
-            System.out.println("Diagnosis " + pn + " not found");
-        }
+	if (app == null)
+	{
+	    app = new Appointment();
+	}
+	app.setAppDate(dpDate.getDate());
+	Comment c = new Comment();
+	c.setCommentDate(new Date());
+	c.setCommentText(taCommentText.getText());
+	am.insert(c);
+	app.setComment(c);
+	String pn = (String) cbPatient.getSelectedItem();
+	Patient p = (Patient) pm.findById(Integer.valueOf(pn.split(" ")[0]));
+	if (p != null)
+	{
+	    app.setPatient(p);
+	} else
+	{
+	    System.out.println("Patient " + pn + " not found");
+	}
+	pn = (String) cbDiagnosis.getSelectedItem();
+	Diagnosis d = (Diagnosis) dm.findByCode(pn.split(" ")[0]);
+	if (d != null)
+	{
+	    app.setDiagnosis(d);
+	} else
+	{
+	    System.out.println("Diagnosis " + pn + " not found");
+	}
 
-        AppointmentId aid = new AppointmentId(0, p.getPatId(), d.getDiagId(), c.getCommentId());
-        res.setId(aid);
-        return res;
+	AppointmentId aid = new AppointmentId(0, p.getPatId(), d.getDiagId(), c.getCommentId());
+	app.setId(aid);
+	return app;
     }
 
     public JButton getOkButton()
     {
-        return btnOK2;
+	return btnOK2;
     }
 
     public JButton getCancelButton()
     {
-        return btnCancel;
+	return btnCancel;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton brnNewPatient;
@@ -393,6 +421,6 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
     @Override
     public void reload()
     {
-        loadDialog();
+	loadDialog();
     }
 }
