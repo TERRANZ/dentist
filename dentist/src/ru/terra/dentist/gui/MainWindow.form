@@ -82,7 +82,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miParientsReportActionPerformed"/>
               </Events>
-<<<<<<< HEAD
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miAllAppointmentsReport">
               <Properties>
@@ -91,8 +90,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miAllAppointmentsReportActionPerformed"/>
               </Events>
-=======
->>>>>>> 57d8b9cc5a4bd4987af6b6f3542c97749da2eeca
             </MenuItem>
           </SubComponents>
         </Menu>
