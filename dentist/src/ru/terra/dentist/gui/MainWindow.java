@@ -2,7 +2,6 @@ package ru.terra.dentist.gui;
 
 import ru.terra.dentist.report.AppointmentsReport;
 import ru.terra.dentist.report.PatientReports;
-import ru.terra.dentist.report.PatientsReport;
 
 
 /**

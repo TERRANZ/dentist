@@ -111,7 +111,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 		{
 		    cache.add((Appointment) o);
 		    Vector<Object> oneRow = new Vector<Object>();
-		    oneRow.add(((Appointment) o).getId().getAppId());
+		    oneRow.add(((Appointment) o).getAppId());
 		    oneRow.add(((Appointment) o).getPatient().getPatName());
 		    oneRow.add(((Appointment) o).getDiagnosis().getDiagName());
 		    oneRow.add(((Appointment) o).getAppDate());
@@ -152,6 +152,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
         miDelete = new javax.swing.JMenuItem();
         mrReports = new javax.swing.JMenu();
         miPrintList = new javax.swing.JMenuItem();
+        miReportByPatient = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Приёмы");
@@ -203,6 +204,14 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
         });
         mrReports.add(miPrintList);
 
+        miReportByPatient.setText("Отчёт по пациенту");
+        miReportByPatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miReportByPatientActionPerformed(evt);
+            }
+        });
+        mrReports.add(miReportByPatient);
+
         jMenuBar1.add(mrReports);
 
         setJMenuBar(jMenuBar1);
@@ -236,7 +245,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 	Integer row = tblApps.getSelectedRow();
 	if (row != -1)
 	{
-	    a = cache.get(row);
+	    a = (Appointment) am.findById((Integer) tblApps.getValueAt(row, 0));
 	}
 	nad.setApp(a);
 	nad.setVisible(true);
@@ -247,6 +256,22 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 	AppointmentsReport rep = new AppointmentsReport();
 	rep.allAppointmentsReport();
     }//GEN-LAST:event_miPrintListActionPerformed
+
+    private void miReportByPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miReportByPatientActionPerformed
+    {//GEN-HEADEREND:event_miReportByPatientActionPerformed
+	// TODO add your handling code here:
+	Appointment a = new Appointment();
+	Integer row = tblApps.getSelectedRow();
+	if (row != -1)
+	{
+	    a = cache.get(row);
+	}
+	if (a != null)
+	{
+	    AppointmentsReport ap = new AppointmentsReport();
+	    ap.appsForPatient(a.getPatient().getPatId());
+	}
+    }//GEN-LAST:event_miReportByPatientActionPerformed
 
     /**
      * @param args the command line arguments
@@ -300,6 +325,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
     private javax.swing.JMenuItem miEdit;
     private javax.swing.JMenuItem miNew;
     private javax.swing.JMenuItem miPrintList;
+    private javax.swing.JMenuItem miReportByPatient;
     private javax.swing.JMenu mrApp;
     private javax.swing.JMenu mrReports;
     private javax.swing.JTable tblApps;

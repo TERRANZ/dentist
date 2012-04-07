@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
 import ru.terra.dentist.orm.DiagnosisManager;
-import ru.terra.dentist.orm.entity.AppointmentId;
 import ru.terra.dentist.orm.entity.Comment;
 import ru.terra.dentist.orm.entity.Diagnosis;
 import ru.terra.dentist.orm.entity.Patient;
@@ -386,9 +385,6 @@ public class NewAppDialog extends javax.swing.JDialog implements Reloadable
 	{
 	    System.out.println("Diagnosis " + pn + " not found");
 	}
-
-	AppointmentId aid = new AppointmentId(0, p.getPatId(), d.getDiagId(), c.getCommentId());
-	app.setId(aid);
 	return app;
     }
 

@@ -31,4 +31,20 @@ public class AppointmentsReport extends Report
 	    Logger.getLogger(PatientReports.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
+
+    public void appsForPatient(Integer patId)
+    {
+	try
+	{
+	    JasperReport jasperReport = JasperCompileManager.compileReport("reports/appsForPatient.jrxml");
+	    Map parameters = new HashMap();
+	    parameters.put("REPORT_CONNECTION", conn);
+	    parameters.put("patId", patId);
+	    JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, conn);
+	    JasperViewer.viewReport(print, false);
+	} catch (JRException ex)
+	{
+	    Logger.getLogger(PatientReports.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
 }

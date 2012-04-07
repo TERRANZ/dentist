@@ -17,7 +17,7 @@ public class AppointmentDTO
 
     public AppointmentDTO(Appointment a)
     {
-        this.id = a.getId().getAppId();
+        this.id = a.getAppId();
         this.date = a.getAppDate();
         this.patient = new PatientDTO(a.getPatient());
         this.diagnosis = new DiagnosisDTO(a.getDiagnosis());
