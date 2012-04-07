@@ -55,6 +55,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miReportByPatientActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="miReportByDate">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x447;&#x451;&#x442; &#x437;&#x430; &#x434;&#x430;&#x442;&#x443;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miReportByDateActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>

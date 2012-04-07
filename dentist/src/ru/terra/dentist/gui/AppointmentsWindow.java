@@ -1,8 +1,10 @@
 package ru.terra.dentist.gui;
 
+import com.michaelbaranov.microba.calendar.DatePicker;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -11,6 +13,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import ru.terra.dentist.gui.dialogs.NewAppDialog;
 import ru.terra.dentist.orm.AppointmentsManager;
@@ -153,6 +158,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
         mrReports = new javax.swing.JMenu();
         miPrintList = new javax.swing.JMenuItem();
         miReportByPatient = new javax.swing.JMenuItem();
+        miReportByDate = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Приёмы");
@@ -211,6 +217,14 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
             }
         });
         mrReports.add(miReportByPatient);
+
+        miReportByDate.setText("Отчёт за дату");
+        miReportByDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miReportByDateActionPerformed(evt);
+            }
+        });
+        mrReports.add(miReportByDate);
 
         jMenuBar1.add(mrReports);
 
@@ -273,6 +287,37 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
 	}
     }//GEN-LAST:event_miReportByPatientActionPerformed
 
+    private void miReportByDateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_miReportByDateActionPerformed
+    {//GEN-HEADEREND:event_miReportByDateActionPerformed
+	JFrame frame;
+	frame = new JFrame("Show Message Dialog");
+	DatePicker dp = new DatePicker(new Date());
+	JButton button = new JButton("OK");
+	button.addActionListener(new DatePicked(dp));
+	frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS));
+	frame.add(dp);
+	frame.add(button);
+	//frame.setSize(400, 400);
+	frame.pack();
+	frame.setVisible(true);
+	frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_miReportByDateActionPerformed
+
+    private class DatePicked implements ActionListener
+    {
+	private DatePicker d;
+
+	public DatePicked(DatePicker date)
+	{
+	    this.d = date;
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+	    new AppointmentsReport().appsForDate(d.getDate());
+	}
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -325,6 +370,7 @@ public class AppointmentsWindow extends javax.swing.JFrame implements Reloadable
     private javax.swing.JMenuItem miEdit;
     private javax.swing.JMenuItem miNew;
     private javax.swing.JMenuItem miPrintList;
+    private javax.swing.JMenuItem miReportByDate;
     private javax.swing.JMenuItem miReportByPatient;
     private javax.swing.JMenu mrApp;
     private javax.swing.JMenu mrReports;
